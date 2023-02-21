@@ -1,0 +1,120 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    xmlns:smartlink="sap.ui.comp.navpopover"
+    xmlns:table="sap.ui.table"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:sv="sap.ui.comp.smartvariants"
+    controllerName="com.sap.build.standard.pocPatientServiceAndInvoice.controller.OpenCases"
+    height="100%"
+>
+    <Page title="Open Case List" class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader 
+    sapUiResponsivePadding--content sapUiResponsivePadding--footer" showNavButton="true">
+        <VBox fitContainer="true">
+            <Button id="toggleUpdateMode" text="Change to 'LiveMode'" press="toggleUpdateMode" />
+
+            <smartFilterBar:SmartFilterBar
+                id="smartFilterBar"
+ 
+                entitySet="GetCaseDataSet"
+                enableBasicSearch="true"
+                showClearButton="true"
+            >
+                <smartFilterBar:layoutData>
+                    <FlexItemData shrinkFactor="0" />
+                </smartFilterBar:layoutData>
+                <smartFilterBar:controlConfiguration>
+                    <smartFilterBar:ControlConfiguration  key="NameFirst" visibleInAdvancedArea="true" label="First Name" />
+                    <smartFilterBar:ControlConfiguration  key="NameLast" visibleInAdvancedArea="true" label="Last Name" />
+                </smartFilterBar:controlConfiguration>
+            </smartFilterBar:SmartFilterBar>
+
+            <smartTable:SmartTable
+                id="smartTable"
+                entitySet="GetCaseDataSet"
+                smartFilterId="smartFilterBar"
+                tableType="ResponsiveTable"
+                useExportToExcel="true"
+                useVariantManagement="false"
+                useTablePersonalisation="true"
+                header="Line Items"
+                showRowCount="true"
+                ignoredFields="CaseOrder,CaseId,CaseType,PatientId,NameFirst,NameLast"
+            >
+
+
+             <Table mode="SingleSelectMaster" itemPress="onItemPressSupp">
+                    <columns>
+                        <Column mergeDuplicates="true">
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "CaseOrder", "leadingProperty": "CaseOrder"}' />
+                            </customData>
+                            <Label text="Case Order" />
+                        </Column>
+                        <Column mergeDuplicates="true">
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "CaseId", "leadingProperty": "CaseId"}' />
+                            </customData>
+                            <Label text="Case ID" />
+                        </Column>
+                        <Column hAlign='End'>
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "CaseType", "leadingProperty": "CaseType"}' />
+                            </customData>
+                            <Text text="Case Type" />
+                        </Column>
+                        <Column hAlign='End' >
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "PatientId", "leadingProperty": "PatientId"}' />
+                            </customData>
+                            <Text text="Patient ID" />
+                        </Column>
+                        <Column hAlign='End'>
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "NameFirst", "leadingProperty": "NameFirst"}' />
+                            </customData>
+                            <Text text="First Name" />
+                        </Column>
+                        <Column hAlign='End'>
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "NameLast", "leadingProperty": "NameLast"}' />
+                            </customData>
+                            <Text text="Last Name" />
+                        </Column>
+                        <!-- <Column hAlign='End'>
+                            <customData>
+                                <core:CustomData key="p13nData" value='\{"columnKey": "CaseStatus", "leadingProperty": "CaseStatus"}' />
+                            </customData>
+                            <Text text="Case Status" />
+                        </Column> -->
+                        
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Navigation">
+                            <cells>
+                                <smartlink:SmartLink text="{CaseOrder}" semanticObject="demokit_smartlink_example_01_SemanticObjectName" 
+                                enableAvailableActionsPersonalization="false" />
+                                <smartlink:SmartLink text="{CaseId}" semanticObject="demokit_smartlink_example_01_SemanticObjectName" 
+                                enableAvailableActionsPersonalization="false" />
+                                <smartlink:SmartLink text="{CaseType}" 
+                                semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
+                                <smartlink:SmartLink text="{PatientId}" 
+                                semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
+                                <smartlink:SmartLink text="{NameFirst}" 
+                                semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
+                                <smartlink:SmartLink text="{NameLast}" 
+                                semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
+                                <!-- <smartlink:SmartLink text="{CaseStatus}" 
+                                semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" /> -->
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>                             
+
+               
+            </smartTable:SmartTable>
+        </VBox>
+    </Page>
+</mvc:View>

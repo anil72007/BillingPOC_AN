@@ -1,0 +1,169 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" controllerName="com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceSearch" xmlns="sap.m" xmlns:f="sap.ui.table">
+    <Dialog horizontalScrolling="true" showHeader="true" state="None" stretch="true" title="Service Search" type="Standard" verticalScrolling="true">
+        <content>
+            <ScrollContainer horizontal="true" vertical="true" width="100%" height="267.00000000px" visible="true">
+                <content>
+                    <Table width="auto" noDataText="No data" mode="SingleSelectMaster" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                        <infoToolbar>
+                            <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                                <content>
+                                    <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                </content>
+                            </Toolbar>
+                        </infoToolbar>
+                        <headerToolbar />
+                        <columns>
+                            <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                                <header>
+                                    <Text text="Movement" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                </header>
+                                <footer />
+                            </Column>
+                            <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                <header>
+                                    <Text text="Date" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                </header>
+                                <footer />
+                            </Column>
+                            <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                <header>
+                                    <Text text="Department OU" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                </header>
+                                <footer />
+                            </Column>
+                            <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                <header>
+                                    <Text text="Nursing OU" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                </header>
+                                <footer />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem type="Active">
+                                <cells>
+                                    <ObjectIdentifier title="{Movement}" text="" titleActive="false" visible="true" />
+                                    <Text text="{Date}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    <Text text="{Dept_OU}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    <Text text="{Nursing_OU}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </content>
+            </ScrollContainer>
+            <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                <items>
+                    <MultiComboBox editable="true" enabled="true" width="auto" valueState="None" maxWidth="100%">
+                        <items>
+                            <core:Item text="ER Clinic" enabled="true" key="ER Clinic" />
+                            <core:Item text="General Medicine Clinic" enabled="true" key="General Medicine Clinic" />
+                            <core:Item text="General Ward" enabled="true" key="General Ward" />
+                            <core:Item text="Isolation Ward" enabled="true" key="Isolation Ward" />
+                            <core:Item text="General Professional Fees" enabled="true" key="General Professional Fees" />
+                        </items>
+                    </MultiComboBox>
+                    <SearchField placeholder="Search" showSearchButton="true" visible="true" width="704px" />
+                </items>
+                <layoutData />
+            </HBox>
+            <VBox alignItems="Stretch" direction="Column" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                <items>
+                    <f:TreeTable
+                        id="treeTable"
+                        selectionMode="Single"
+                        rowSelectionChange="onSelect"
+                        enableColumnReordering="false"
+                        expandFirstLevel="false"
+                        editable="false"
+                        rows="{ path:'/GetServiceSet' , parameters : 
+		        { treeAnnotationProperties : 
+		{ hierarchyLevelFor : 'TreeLevel', hierarchyNodeFor : 'Node', hierarchyParentNodeFor : 'Parent', hierarchyDrillStateFor : 'Drillstate' } }}"
+                    >
+                        <f:toolbar>
+                            <Toolbar>
+                                <Title id="title2" text="Nodes" />
+                                <ToolbarSpacer />
+                                <SearchField placeholder="Filter" value="search" search="filterPrice" width="15rem"  />
+                                <!-- <Button id="editButton3" text="Edit" type="Transparent" press="onEdit" />
+                                <Button id="editButton4" text="MakeEditable" type="Transparent" press="onMakeEditable" /> -->
+                            </Toolbar>
+                        </f:toolbar>
+                        <f:columns>
+                            <f:Column label="Description">
+                                <f:template>
+                                    <Text text="{Clas2}" wrapping="false" />
+                                </f:template>
+                            </f:Column>
+                           <f:Column label="Service">
+                                <f:template>
+                                    <Text text="{Object}" wrapping="false" />
+                                </f:template>
+                            </f:Column>
+                            <f:Column label="Description">
+                                <f:template>
+                                    <Text text="{Objecttext}" wrapping="false" />
+                                </f:template>
+                            </f:Column>
+                        </f:columns>
+                    </f:TreeTable>
+
+                    <!-- <f:TreeTable
+        id="idTreeTab1"
+        selectionMode="Single"
+        enableColumnReordering="false"
+        expandFirstLevel="false">
+        rows="{
+            path : '/NodeSet',
+            parameters : {
+                treeAnnotationProperties : {
+                    hierarchyLevelFor : 'HierarchyLevel',
+                    hierarchyNodeFor : 'NodeID',
+                    hierarchyParentNodeFor : 'ParentNodeID',
+                    hierarchyDrillStateFor : 'DrillState'
+                }
+            }
+        }">
+
+        <f:columns>
+
+            <f:Column label="Description">
+                <f:template>
+                    <Text text="{Description}" wrapping="false" />
+                </f:template>
+            </f:Column>
+
+            <f:Column label="HierarchyLevel">
+                <f:template>
+                    <Text text="{HierarchyLevel}" wrapping="false" />
+                </f:template>
+            </f:Column>
+
+            <f:Column label="NodeID">
+                <f:template>
+                    <Text text="{NodeID}" wrapping="false" />
+                </f:template>
+            </f:Column>
+
+            <f:Column label="ParentNodeID">
+                <f:template>
+                    <Text text="{ParentNodeID}" wrapping="false" />
+                </f:template>
+            </f:Column>
+
+        </f:columns>
+
+    </f:TreeTable>                     -->
+                </items>
+                <layoutData />
+            </VBox>
+        </content>
+        <beginButton />
+        <buttons>
+            <Button text="Confirm" type="Default" icon="sap-icon://sys-enter-2" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress" />
+            <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress1" />
+        </buttons>
+        <customHeader />
+        <endButton />
+        <subHeader />
+    </Dialog>
+</core:FragmentDefinition>
