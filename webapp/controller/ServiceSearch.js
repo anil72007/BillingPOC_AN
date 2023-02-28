@@ -2,8 +2,10 @@ sap.ui.define([
 	"sap/ui/base/ManagedObject",
 	"sap/m/MessageBox",
 	"./utilities",
-	"sap/ui/core/routing/History"
-], function (ManagedObject, MessageBox, Utilities, History) {
+	"sap/ui/core/routing/History",
+	'sap/ui/model/Filter',
+	'sap/ui/model/FilterOperator'
+], function (ManagedObject, MessageBox, Utilities, History, Filter, FilterOperator) {
 
 	return ManagedObject.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceSearch", {
 		constructor: function (oView) {
@@ -14,7 +16,68 @@ sap.ui.define([
 
 
 		},
+		onInit: function () {
+			debugger;
+			this._oDialog = this.getControl();
+			this.cData = this.getOwnerComponent().getCompData();
 
+			this.oData = {};
+			var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
+			var oModel = new sap.ui.model.odata.ODataModel(url, true);
+			this.service = new sap.ui.model.json.JSONModel();
+			this.movement = new sap.ui.model.json.JSONModel();
+
+			// this.srvTab = this.getView().byId("idSrvGrp");
+			this.movTab = this.getView().byId("idMovement");
+
+			// this.listitem = this.getView().byId("idSrvGrpListItem");
+			// if (this.listitem) {
+			// 	this.oTemplate = this.listitem.clone();
+			// }
+
+			this.listMovement = this.getView().byId("idListMovement");
+			if (this.listMovement) {
+				this.oTempMovement = this.listMovement.clone();
+			}
+			this.movement.setData(this.cData.results[0].To_Movement.results);
+			this.movTab.setModel(this.movement);
+			this.movTab.bindAggregation("items", {
+				path: "/",
+				template: this.oTempMovement
+			});
+
+			// this.getView().byId("idSrvGrp").setFilterFunction(function (sTerm, oItem) {
+			// 	// A case-insensitive 'string contains' filter
+			// 	return new RegExp("^" + sTerm, "i").test(oItem.getText());
+			// });
+
+			var that = this;
+			oModel.read("/GetServiceSet", null, null, null,
+				function onSuccess(oData, oResponse) {
+
+					that.oData = oData;
+					const data = oData.results;
+					const uniqueData = {};
+					data.forEach(item => {
+
+						if (!uniqueData[item.Clas2]) {
+
+							uniqueData[item.Clas2] = item;
+						}
+					});
+					// const newJsonData = JSON.stringify(Object.values(uniqueData));
+					that.service.setData(uniqueData);
+					// that.srvTab.setModel(that.service);
+					// that.srvTab.bindAggregation("items", {
+					// 	path: "/",
+					// 	template: that.oTemplate
+					// });
+				},
+				function _onError(oError) {
+
+				}
+			);
+		},
 		exit: function () {
 			delete this._oView;
 		},
@@ -33,132 +96,71 @@ sap.ui.define([
 
 		open: function () {
 			debugger;
-			var oView = this._oView;
-			var oControl = this._oControl;
 
-			// var aData = 
-			// [
+			// const data =  [
 			// 	{
-			// 		"NodeID": 1,
-			// 		"HierarchyLevel": 0,
-			// 		"Description": "1",
-			// 		"ParentNodeID": null,
-			// 		"DrillState": "expanded"
+			// 		"text": "Node1",
+			// 		"ref": "sap-icon://attachment-audio",
+			// 		"nodes":
+			// 		[
+			// 			{
+			// 				"text": "Node1-1",
+			// 				"ref": "sap-icon://attachment-e-pub",
+			// 				"nodes":[
+			// 					{
+			// 						"text": "Node1-1-1",
+			// 						"ref": "sap-icon://attachment-html"
+			// 					},
+			// 					{
+			// 						"text": "Node1-1-2",
+			// 						"ref": "sap-icon://attachment-photo",
+			// 						"nodes":[
+			// 							{
+			// 								"text": "Node1-1-1",
+			// 								"ref": "sap-icon://attachment-text-file",
+			// 								"nodes":[
+			// 									{
+			// 										"text": "Node1-1-1-1",
+			// 										"ref": "sap-icon://attachment-video"
+			// 									},
+			// 									{
+			// 										"text": "Node1-1-1-2",
+			// 										"ref": "sap-icon://attachment-zip-file"
+			// 									},
+			// 									{
+			// 										"text": "Node1-1-1-3",
+			// 										"ref": "sap-icon://course-program"
+			// 									}
+			// 								]
+			// 							}
+			// 						]
+			// 					}
+			// 				]
+			// 			},
+			// 			{
+			// 				"text": "Node1-2",
+			// 				"ref": "sap-icon://create"
+			// 			}
+			// 		]
 			// 	},
 			// 	{
-			// 		"NodeID": 2,
-			// 		"HierarchyLevel": 0,
-			// 		"Description": "2",
-			// 		"ParentNodeID": null,
-			// 		"DrillState": "expanded"
-			// 	},
-			// 	{
-			// 		"NodeID": 3,
-			// 		"HierarchyLevel": 0,
-			// 		"Description": "3",
-			// 		"ParentNodeID": null,
-			// 		"DrillState": "expanded"
-			// 	},
-			// 	{
-			// 		"NodeID": 4,
-			// 		"HierarchyLevel": 1,
-			// 		"Description": "1.1",
-			// 		"ParentNodeID": 1,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 5,
-			// 		"HierarchyLevel": 1,
-			// 		"Description": "1.2",
-			// 		"ParentNodeID": 1,
-			// 		"DrillState": "expanded"
-			// 	},
-			// 	{
-			// 		"NodeID": 6,
-			// 		"HierarchyLevel": 2,
-			// 		"Description": "1.2.1",
-			// 		"ParentNodeID": 5,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 7,
-			// 		"HierarchyLevel": 2,
-			// 		"Description": "1.2.2",
-			// 		"ParentNodeID": 5,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 8,
-			// 		"HierarchyLevel": 1,
-			// 		"Description": "2.1",
-			// 		"ParentNodeID": 2,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 9,
-			// 		"HierarchyLevel": 1,
-			// 		"Description": "2.2",
-			// 		"ParentNodeID": 2,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 10,
-			// 		"HierarchyLevel": 1,
-			// 		"Description": "2.3",
-			// 		"ParentNodeID": 2,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 11,
-			// 		"HierarchyLevel": 1,
-			// 		"Description": "3.1",
-			// 		"ParentNodeID": 3,
-			// 		"DrillState": "expanded"
-			// 	},
-			// 	{
-			// 		"NodeID": 12,
-			// 		"HierarchyLevel": 2,
-			// 		"Description": "3.1.1",
-			// 		"ParentNodeID": 11,
-			// 		"DrillState": "expanded"
-			// 	},
-			// 	{
-			// 		"NodeID": 13,
-			// 		"HierarchyLevel": 3,
-			// 		"Description": "3.1.1.1",
-			// 		"ParentNodeID": 12,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 14,
-			// 		"HierarchyLevel": 3,
-			// 		"Description": "3.1.1.2",
-			// 		"ParentNodeID": 12,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 15,
-			// 		"HierarchyLevel": 3,
-			// 		"Description": "3.1.1.3",
-			// 		"ParentNodeID": 12,
-			// 		"DrillState": "leaf"
-			// 	},
-			// 	{
-			// 		"NodeID": 16,
-			// 		"HierarchyLevel": 3,
-			// 		"Description": "3.1.1.4",
-			// 		"ParentNodeID": 12,
-			// 		"DrillState": "leaf"
+			// 		"text": "Node2",
+			// 		"ref": "sap-icon://customer-financial-fact-sheet"
 			// 	}
 			// ];
 
-			// var jModel = new sap.ui.model.json.JSONModel();
-			// jModel.setData(aData);
-			// // jModel.loadData("Nodes.json",false);
-			// this.srvTab = this.getView().byId("treeTable1");
+			//   // Create the JSON model and set it to the view
+			//   const model = new sap.ui.model.json.JSONModel(data);
+			//   this.getView().setModel(model,"TreeExample");
 
-			// this.srvTab.setModel(jModel);
+			var oView = this._oView;
+			var oControl = this._oControl;
+			this.getView().byId("idSrcSearch").removeAllItems();
+			this.getView().byId("treeTable").clearSelection();
+			// this.getView().byId("treeTable").getSelectionModel().removeSelections();
+			// if(this.getView().byId("treeTable").getSelectionModel()){
 
+			// }
 			if (!this._bInit) {
 
 				// Initialize our fragment
@@ -191,17 +193,151 @@ sap.ui.define([
 
 		},
 		_onButtonPress: function (oEvent) {
+			// debugger;
 
-			var oBindingContext = oEvent.getSource().getBindingContext();
+			// var a = { "CreatDate" : "",
+			// 		  "Currency"  : "SGD",
+			// 		  "DocNumber" : "1000000036",
+			// 		  "HgLvItem"  : "000000",
+			// 		  "ItemCateg" : "ZADH",
+			// 		  "ItmNumber" : "000030",
+			// 		  "MatEntrd"  : "15",
+			// 		  "Material"  : "15",
+			// 		  "MatlGroup" : "OSS000000",
+			// 		  "NetValue"  : 200, 
+			// 		  "ObjNrIt"   : "",
+			// 		  "PrcGroup1"   : "",
+			// 		  "PrcGroup2"   : "",
+			// 		  "PrcGroup3"   : "",
+			// 		  "PrcGroup4"   : "",
+			// 		  "PrcGroup5"   : "",
+			// 		  "RecTime"   : "",
+			// 		  "ReqQty" : "",
+			// 		  "SalesUnit" : "",
+			// 		  "ShortText" : "" };
+			// var oData = this.getView().getModel("main").getData();
+			// oData.To_Items.results.push(a);
+			// this.getView().getModel("main").setData(oData);
+			// this.getView().getModel("main").refresh();
+			// this.getOwnerComponent().getCompData().results[0].To_Items.results.push(a);
 
-			return new Promise(function (fnResolve) {
+			var addItems = this.getView().byId("idSrcSearch").getSelectedItems();
+			// var headItem = this.cData.results[0].To_Items.results.filter(item => item.ItemCateg === 'ZADH');
+			// var headItem = this.getView().byId("idtab").getModel().getData();
+			// var existingItem = headItem[headItem.length - 1];
+			var lineItem = parseInt(this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[1].getText());
 
-				this.doNavigate("ServiceDetailSearchSearch", oBindingContext, fnResolve, "");
-			}.bind(this)).catch(function (err) {
-				if (err !== undefined) {
-					MessageBox.error(err.message);
-				}
-			});
+			let currentDate = new Date();
+			let options = { dateStyle: 'short' };
+			let dateString = currentDate.toLocaleDateString(undefined, options);
+			var oData = this.getView().getModel("main").getData();
+			for (var i = 0; i < addItems.length; i++) {
+				lineItem = lineItem + 10;
+				var data = { "CreatDate" : new Date(),
+						  "Currency"  : "SGD",
+						  "DocNumber" : this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
+						  "HgLvItem"  : "000000",
+						  "ItemCateg" : "ZADH",
+						  "ItmNumber" : lineItem,
+						  "MatEntrd"  : this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
+						  "Material"  : this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
+						  "MatlGroup" : "OSS000000",
+						  "NetValue"  : "", 
+						  "ObjNrIt"   : "",
+						  "PrcGroup1"   : "",
+						  "PrcGroup2"   : "",
+						  "PrcGroup3"   : "",
+						  "PrcGroup4"   : "",
+						  "PrcGroup5"   : "",
+						  "RecTime"   : "",
+						  "ReqQty" : "1",
+						  "SalesUnit" : "",
+						  "ShortText" : this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[1].getText(),
+						  "Mode"  : "INS"};
+				oData.To_Items.results.push(data);
+				// var columnListItemNewLine = new sap.m.ColumnListItem({
+				// 	highlight: "Warning",
+				// 	selected: true,
+				// 	type: "Navigation",
+				// 	cells: [
+
+				// 		new sap.m.ObjectIdentifier({
+				// 			title: this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
+				// 			visible: true
+				// 		}),
+				// 		new sap.m.Text({
+				// 			text: lineItem,
+				// 			visible: true
+				// 		}),
+				// 		new sap.m.Text({
+				// 			text: this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
+				// 			visible: true
+				// 		}),
+				// 		new sap.m.Text({
+				// 			text: this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[1].getText(),
+				// 			visible: true
+				// 		}),
+				// 		new sap.m.Text({
+				// 			text: "1",
+				// 			visible: true
+				// 		}),
+				// 		new sap.m.ObjectNumber({
+				// 			number: 0,
+				// 			unit: "SGD",
+				// 			emphasized: true
+				// 		}),
+				// 		new sap.m.Text({
+				// 			text: dateString,
+				// 			// type: 'sap.ui.model.type.Date',
+				// 			// formatOptions: { UTC: true, style: 'short' },
+				// 			visible: true
+				// 		}),
+				// 		new sap.m.Text({
+				// 			text: "INS",
+				// 			visible: false
+				// 		})
+				// 	]
+				// });
+				// columnListItemNewLine.highlight();
+				// this.getView().byId("idSrcSearch").attachEventOnce("updateFinished", function() {
+				// 	// Get a reference to the new row in the table
+				// 	let selectedRow = this.getView().byId("idSrcSearch").getItems()[newRowIndex];
+				// 	// Add the CSS class to the new row
+				// 	selectedRow.addStyleClass("highlighted-row");
+				//   });
+				var a = {
+					"SdDoc" : this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
+					"ItmNumber" : lineItem.toString(),
+					"CondType" : "PR00",
+					"CondTypeDesc" : "Price",
+					"CondValue" : ""
+				};
+				// this.cData.results[0].To_ItemCond.results.push(a);
+				this.getView().getModel("main").getData().To_ItemCond.results.push(a);
+				// this.getView().byId("idtab").addItem(columnListItemNewLine);
+				
+			}
+			this.getView().getModel("main").setData(oData);
+			this.getOwnerComponent().setCompData(this.cData);
+			this.close();
+			// var oBindingContext = oEvent.getSource().getBindingContext();
+
+			// // var sPath = oBindingContext.sPath;
+			// // var myId = sPath.split("/")[sPath.split("/").length - 1];
+			// // // var myId = oEvent.getParameter("listItem").getBindingContext().getModel().oData[oEvent.getParameter("listItem").getBindingContext().getPath().substring(1)].CaseOrder;
+			// // // this.oRouter = this.getOwnerComponent().getRouter();
+			// // this.oRouter.navTo("ServiceList1",{
+			// // 	OrdNumber : myId
+			// // });
+
+			// return new Promise(function (fnResolve) {
+
+			// 	this.doNavigate("ServiceList2", oBindingContext, fnResolve, "");
+			// }.bind(this)).catch(function (err) {
+			// 	if (err !== undefined) {
+			// 		MessageBox.error(err.message);
+			// 	}
+			// });
 
 		},
 		doNavigate: function (sRouteName, oBindingContext, fnPromiseResolve, sViaRelation) {
@@ -251,7 +387,9 @@ sap.ui.define([
 					}.bind(this));
 				}
 			} else {
-				this.oRouter.navTo(sRouteName);
+				var sPath = oBindingContext.sPath;
+				var myId = sPath.split("/")[sPath.split("/").length - 1];
+				this.oRouter.navTo(sRouteName, { OrdNumber: myId });
 			}
 
 			if (typeof fnPromiseResolve === "function") {
@@ -260,16 +398,16 @@ sap.ui.define([
 
 		},
 		_onButtonPress1: function () {
-
+			debugger;
 			this.close();
 
 		},
 		filterPrice: function (oEvent) {
-			debugger;
-			var oTreeTable = this.getView().byId("treeTable");
+			// debugger;
+			// var oTreeTable = this.getView().byId("treeTable");
 
-			var oBinding = oTreeTable.getBinding("rows");
-			var oFilter = new sap.ui.model.Filter("Object", sap.ui.model.FilterOperator.EQ, "000000000000000016");
+			// var oBinding = oTreeTable.getBinding("rows");
+			// var oFilter = new sap.ui.model.Filter("Object", sap.ui.model.FilterOperator.EQ, "000000000000000016");
 
 			// oTreeTable.bindRows({
 			// 		path: "/GetServiceSet",
@@ -290,7 +428,7 @@ sap.ui.define([
 			// 		new sap.ui.model.Filter("Object", sap.ui.model.FilterOperator.EQ, "000000000000000016")
 			// 	],
 			// 	parameters: {
-					
+
 			// 		treeAnnotationProperties: {
 			// 			hierarchyLevelFor: 'TreeLevel',
 			// 			hierarchyNodeFor: 'Node',
@@ -299,38 +437,98 @@ sap.ui.define([
 			// 		}
 			// 	}
 			// });
-			oBinding.filter([oFilter]);
+			// oBinding.filter(oFilter);
 		},
-		onInit: function () {
-			debugger;
-			this._oDialog = this.getControl();
 
 
-			// var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
-			// var oModel = new sap.ui.model.odata.ODataModel(url, true);
-			// this.service = new sap.ui.model.json.JSONModel();
-			// this.srvTab = this.getView().byId("treeTable");
-	// 		rows="{ path:'/GetServiceSet' , parameters : 
-	// 		{ treeAnnotationProperties : 
-	// { hierarchyLevelFor : 'TreeLevel', hierarchyNodeFor : 'Node', hierarchyParentNodeFor : 'Parent', hierarchyDrillStateFor : 'Drillstate' } }}"
-	// 		// this.srvTab.setModel(oModel);
-			// var that = this;
-			// oModel.read("/GetServiceSet",null, null,null,
-			// 	function onSuccess(oData, oResponse){
-			// 		debugger;
-			// 		that.service.setData(oData.results);
-			// 		that.srvTab.setModel(that.service);
-			// 		that.srvTab.bindRows({
-			// 			path: "/",
-			// 			parameters : {
-			// 				arrayNames: ['children']
-			// 			}
-			// 		});
-			// 	},
-			// 	function _onError(oError){
-			// 		debugger;
+		handleSelectionChange: function (oEvent) {
+
+			// var changedItem = oEvent.getParameter("changedItem");
+			// var isSelected = oEvent.getParameter("selected");
+
+			// this.srvSearchModel = new sap.ui.model.json.JSONModel();
+			// this.srvSearchTab = this.getView().byId("idSrcSearch");
+			// if (this.srvSearchTab.getModel().getData()) {
+			// 	this.srvSearch = this.srvSearchTab.getModel().getData();
+			// }
+
+
+			// this.listSrcSearch = this.getView().byId("idListSrcSearch");
+			// if (this.listSrcSearch) {
+			// 	this.oTemplate = this.listSrcSearch.clone();
+			// }
+			// if (!isSelected) {
+			// 	this.srvSearchTab.getModel().setData(this.srvSearchTab.getModel().getData().filter(item => item.Clas2 !== changedItem.mProperties.key));
+			// } else {
+			// 	var oclas2 = [];
+			// 	oclas2.push(changedItem.mProperties.key);
+			// 	if (this.srvSearchTab.getModel().getData()) {
+			// 		for (var i = 0; i < this.srvSearchTab.getModel().getData().length; i++) {
+			// 			oclas2.push(this.srvSearchTab.getModel().getData()[i].Clas2)
+			// 		}
 			// 	}
-			// );
+			// 	this.srvSearchModel.setData(this.oData.results.filter(item => oclas2.includes(item.Clas2)));
+			// 	this.srvSearchTab.setModel(this.srvSearchModel);
+			// }
+			// this.srvSearchTab.bindAggregation("items", {
+			// 	path: "/",
+			// 	template: this.oTemplate
+			// });
+		},
+		onSelect: function (oEvent) {
+			debugger;
+			this.srvSearchModel = new sap.ui.model.json.JSONModel();
+			this.srvSearchTab = this.getView().byId("idSrcSearch");
+			this.listSrcSearch = this.getView().byId("idListSrcSearch");
+			if (this.listSrcSearch) {
+				this.oTemplate = this.listSrcSearch.clone();
+			}
+
+			var aSelectedIndices = oEvent.getSource().getSelectedIndices();
+			var oclas2 = [];
+			for (var i = 0; i < aSelectedIndices.length; i++) {
+				var oContext = oEvent.getSource().getContextByIndex(aSelectedIndices[i]);
+				oclas2.push(oContext.getObject().Clas2);
+			}
+
+			this.srvSearchModel.setData(this.oData.results.filter(item => oclas2.includes(item.Clas2)));
+			this.srvSearchTab.setModel(this.srvSearchModel);
+
+			this.srvSearchTab.bindAggregation("items", {
+				path: "/",
+				template: this.oTemplate
+			});
+		},
+		handleSelectionFinish: function (oEvent) {
+
+			// var selectedItems = oEvent.getParameter("selectedItems");
+			// this.srvSearchModel = new sap.ui.model.json.JSONModel();
+			// this.srvSearchTab = this.getView().byId("idSrcSearch");
+
+			// this.listSrcSearch = this.getView().byId("idListSrcSearch");
+			// if (this.listSrcSearch) {
+			// 	this.oTemplate = this.listSrcSearch.clone();
+			// }
+
+			// var oclas2 = [];
+			// for (var i = 0; i < selectedItems.length; i++) {
+			// 	oclas2.push(selectedItems[i].getKey());
+			// }
+
+			// this.srvSearchModel.setData(this.oData.results.filter(item => oclas2.includes(item.Clas2)));
+			// this.srvSearchTab.setModel(this.srvSearchModel);
+
+			// this.srvSearchTab.bindAggregation("items", {
+			// 	path: "/",
+			// 	template: this.oTemplate
+			// });
+
+		},
+		onSearch: function (oEvent) {
+			debugger;
+			var sVal = oEvent.getSource().getValue();
+			var oFilter1 = new Filter("Objecttext", FilterOperator.Contains, sVal);
+			this.getView().byId("idSrcSearch").getBinding("items").filter(oFilter1);
 		},
 		onExit: function () {
 			this._oDialog.destroy();

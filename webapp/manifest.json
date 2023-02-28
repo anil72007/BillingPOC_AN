@@ -81,6 +81,11 @@
                 "type": "sap.ui.model.odata.v2.ODataModel",
                 "preload": true,
                 "settings": {}
+            },
+            "resources": {
+                "css": [{
+                    "uri": "utils/BillingPOC.css"
+                }]
             }
         },
         "routing": {
@@ -153,6 +158,12 @@
                 {
                     "pattern": "toServiceList/{OrdNumber}",
                     "name": "ServiceList1",
+                    "target":  "ServiceList"
+                },
+                
+                {
+                    "pattern": "toServiceList/{OrdNumber}",
+                    "name": "ServiceList2",
                     "target":  "ServiceList"
                 },
                 {

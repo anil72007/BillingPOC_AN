@@ -10,7 +10,7 @@ server:
         ignoreCertError: false
         backend:
           - path: /sap
-            url: https://s4devapp01:44300/
+            url: http://s4devapp01:8000/
         ui5:
           path:
             - /resources
