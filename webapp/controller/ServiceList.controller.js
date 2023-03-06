@@ -18,62 +18,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceList", {
 		formatter: format,
 		handleRouteMatched: function (oEvent) {
-			debugger;
-			// var sAppId = "App6352534280e30701c54b4b6b";
-
-			// var oParams = {};
-
-			// if (sap.ui.Device.system.desktop) {
-
-			// 	this._oRootView = this.getOwnerComponent().getAggregation("rootControl");
-			// 	this._oRootView.getController().setMode(sap.m.SplitAppMode.StretchCompressMode);
-
-			// } else {
-
-			// 	this._oRootView = this.getOwnerComponent().getAggregation("rootControl");
-			// 	this._oRootView.getController().setMode(sap.m.SplitAppMode.StretchCompressMode);
-
-			// }
-			// if (oEvent.mParameters.data.context) {
-			// 	this.sContext = oEvent.mParameters.data.context;
-
-			// } else {
-			// 	if (this.getOwnerComponent().getComponentData()) {
-			// 		var patternConvert = function(oParam) {
-			// 			if (Object.keys(oParam).length !== 0) {
-			// 				for (var prop in oParam) {
-			// 					if (prop !== "sourcePrototype" && prop.includes("Set")) {
-			// 						return prop + "(" + oParam[prop][0] + ")";
-			// 					}
-			// 				}
-			// 			}
-			// 		};
-
-			// 		this.sContext = patternConvert(this.getOwnerComponent().getComponentData().startupParameters);
-
-			// 	}
-			// }
-
-			// if (!this.sContext) {
-			// 	this.sContext = "CaseSet('3')";
-			// }
-
-			// var oPath;
-
-			// if (this.sContext) {
-			// 	oPath = {
-			// 		path: "/" + this.sContext,
-			// 		parameters: oParams
-			// 	};
-			// 	this.getView().bindObject(oPath);
-			// }
-
-
-			// var ordID = oEvent.getParameter("arguments").OrdNumber;
-			// var sPath = '/' + ordID;
-			// this.getView().bindElement(sPath, {
-			// 	expand: 'To_Items'
-			// });
+			
 		},
 		onDeleteRow: function (oEvent) {
 			debugger;

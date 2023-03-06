@@ -20,7 +20,7 @@
     "start-mock": "fiori run --open \"test/flpSandboxMockServer.html?sap-ui-xx-viewCache=false#app-tile\""
   },
   "devDependencies": {
-    "@sap/ux-ui5-tooling": "^1.8.4",
+    "@sap/ux-ui5-tooling": "^1.9.1",
     "@ui5/cli": "^2.14.1",
     "rimraf": "3.0.2"
   },
