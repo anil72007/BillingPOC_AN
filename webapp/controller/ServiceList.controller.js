@@ -6,12 +6,17 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"./utilities",
 	"sap/ui/core/routing/History",
 	'sap/ui/core/util/Export',
-	'sap/ui/core/util/ExportTypeCSV'
-], function (BaseController, MessageBox, ServiceSearch, InvoiceList, Log, Utilities, History,Export, ExportTypeCSV) {
+	'sap/ui/core/util/ExportTypeCSV',
+	'sap/ui/core/Fragment',
+	"sap/m/Dialog",
+	"sap/m/Button",
+	"sap/m/Text",
+	"com/sap/build/standard/pocPatientServiceAndInvoice/utils/format"
+], function (BaseController,  MessageBox, ServiceSearch, InvoiceList, Log, Utilities, History, Export, ExportTypeCSV, Fragment, Dialog, Button, Text,format) {
 	"use strict";
 
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceList", {
-
+		formatter: format,
 		handleRouteMatched: function (oEvent) {
 			debugger;
 			// var sAppId = "App6352534280e30701c54b4b6b";
@@ -70,76 +75,130 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// 	expand: 'To_Items'
 			// });
 		},
-		onDeleteRow : function(oEvent){
+		onDeleteRow: function (oEvent) {
 			debugger;
 
 			var oTable = this.getView().byId("idtab");
 			var oSelectedItem = oEvent.getParameter("listItem");
-			oTable.removeItem(oSelectedItem);
-			var array = this.getView().getModel("main").getData().To_Items.results;
-			var value = oSelectedItem.getCells()[1].getText();
-			const index = array.findIndex(element => element["ItmNumber"] === value);
-			if (index !== -1) {
-			//   array.splice(index, 1);
-				this.getView().getModel("main").getData().To_Items.results[index].Mode = 'DEL';
-			}
-
-
+			var that = this;
+			this.openConfirmationDialog("Are you sure you want to delete this item?", function (result) {
+				if (result === true) {
+					oTable.removeItem(oSelectedItem);
+					var array = that.getView().getModel("main").getData().To_Items.results;
+					var value = oSelectedItem.getCells()[1].getText();
+					const index = array.findIndex(element => element["ItmNumber"] === value);
+					if (index !== -1) {
+						//   array.splice(index, 1);
+						that.getView().getModel("main").getData().To_Items.results[index].Mode = 'DEL';
+					}
+				} else {
+					// User clicked "No", do nothing
+				}
+			});
 			// this.getView().getModel("main").refresh();
 		},
-		onDataExport : function(oEvent) {
+		openConfirmationDialog: function (message, callback) {
+			var dialog = new Dialog({
+				title: "Confirmation",
+				type: "Message",
+				content: new Text({
+					text: message
+				}),
+				beginButton: new Button({
+					text: "Yes",
+					press: function () {
+						dialog.close();
+						callback(true);
+					}
+				}),
+				endButton: new Button({
+					text: "No",
+					press: function () {
+						dialog.close();
+						callback(false);
+					}
+				})
+			});
+
+			dialog.open();
+		},
+		onDataExport: function (oEvent) {
 
 			var oExport = new Export({
 
 				// Type that will be used to generate the content. Own ExportType's can be created to support other formats
-				exportType : new ExportTypeCSV({
-					separatorChar : ";"
+				exportType: new ExportTypeCSV({
+					separatorChar: ";"
 				}),
 
 				// Pass in the model created above
-				models : this.getView().getModel("main"),
+				models: this.getView().getModel("main"),
 
 				// binding information for the rows aggregation
-				rows : {
-					path : "/To_Items"
+				rows: {
+					path: "/To_Items"
 				},
 
 				// column definitions with column name and binding info for the content
 
-				columns : [{
-					name : "Document Number",
-					template : {
-						content : "{DocNumber}"
+				columns: [{
+					name: "Document Number",
+					template: {
+						content: "{DocNumber}"
 					}
 				}, {
-					name : "Item Number",
-					template : {
-						content : "{ItmNumber}"
+					name: "Item Number",
+					template: {
+						content: "{ItmNumber}"
 					}
 				}, {
-					name : "Material ",
-					template : {
-						content : "{Material}"
+					name: "Material ",
+					template: {
+						content: "{Material}"
 					}
 				}, {
-					name : "Description",
-					template : {
-						content : "{ShortText}"
+					name: "Description",
+					template: {
+						content: "{ShortText}"
 					}
 				}, {
-					name : "Price",
-					template : {
-						content : "{NetValue}"
+					name: "Price",
+					template: {
+						content: "{NetValue}"
 					}
 				}]
 			});
 
 			// download exported file
-			oExport.saveFile().catch(function(oError) {
+			oExport.saveFile().catch(function (oError) {
 				MessageBox.error("Error when downloading data. Browser might not be supported!\n\n" + oError);
-			}).then(function() {
+			}).then(function () {
 				oExport.destroy();
 			});
+		},
+		onNavBack: function () {
+			this.getOwnerComponent().setCompData([]);
+			var oHistory = History.getInstance();
+			var sPreviousHash = oHistory.getPreviousHash();
+			var oQueryParams = this.getQueryParameters(window.location);
+
+			if (sPreviousHash !== undefined || oQueryParams.navBackToLaunchpad) {
+				window.history.go(-1);
+			} else {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("default", true);
+			}
+
+		},
+		getQueryParameters: function (oLocation) {
+			var oQuery = {};
+			var aParams = oLocation.search.substring(1).split("&");
+			for (var i = 0; i < aParams.length; i++) {
+				var aPair = aParams[i].split("=");
+				oQuery[aPair[0]] = decodeURIComponent(aPair[1]);
+			}
+			return oQuery;
+
 		},
 		getCaseItemData: function (oEvent) {
 			debugger;
@@ -160,7 +219,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			aFilters.push(ordID);
 			var efilter = "$filter=CaseOrder eq '" + this.ordData + "'";
 
-			var url = "GetCaseDataSet?$expand=To_ItemCond,To_Items,To_Movement" + "&&" + efilter;
+			var url = "GetCaseDataSet?$expand=To_ItemCond,To_Items,To_Movement,To_Message" + "&&" + efilter;
 
 			var that = this;
 			// if (this.getOwnerComponent().getCompData().results) {
@@ -171,7 +230,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// 		template: that.oTemplate
 			// 	});
 			// } else {
-			if (this.getOwnerComponent().getCompData().length === 0) {
+			if (!this.getOwnerComponent().getCompData().results) {
+				// if (this.getOwnerComponent().getCompData().results.length === 0) {
 				this.oGloablDiaglogBox.open();
 				oModel.read(url, null, { filters: aFilters }, null,
 					function onSuccess(oData, oResponse) {
@@ -226,18 +286,20 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				// oDataModel.attachRequestCompleted(function() {
 				// 				sap.ui.core.BusyIndicator.hide();
 				// 			});
-				// var ordID = oEvent.getParameter("arguments").OrdNumber;
-				// var sPath = '/' + ordID;
-				// // this.getView().bindElement(sPath, {
-				// // 	expand: 'To_Items'
-				// // });
-				// this.getView().bindElement(sPath);
+				var ordID = oEvent.getParameter("arguments").OrdNumber;
+				var sPath = '/' + ordID;
+				this.getView().bindElement(sPath, {
+					expand: 'To_Items'
+				});
+				this.getView().bindElement(sPath);
 
 				// var oModel = this.getOwnerComponent().getModel();
 				// this.getView().setModel(oModel);
+				// }
 			}
 		},
-		onSaveItems:function(oEvent){
+		oPopupMessage: null, oCondType: null,
+		onSaveItems: function (oEvent) {
 			debugger;
 			var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
 			var oModel = new sap.ui.model.odata.ODataModel(url, true);
@@ -267,20 +329,50 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 			// }
 			var cData = this.getOwnerComponent().getCompData().results[0];
-
+			var that = this;
+			this.oMessage = new sap.ui.model.json.JSONModel();
+			this.oGloablDiaglogBox.open();
+			this.popupView = null;
 			oModel.create("/GetCaseDataSet", cData, {
 				method: "POST",
-				success: function(oResultData, oResponse) {
+				success: function (oResultData, oResponse) {
+					that.oGloablDiaglogBox.close();
+					if (!that.popupView) {
+						that.popupView = sap.ui.xmlfragment("com.sap.build.standard.pocPatientServiceAndInvoice.view.Messages", that);
+					}
+					that.oMessage.setData(oResultData);
 
-					sap.m.MessageToast.show("Meal Set Data Updated Successfully");
+					that.popupView.setModel(that.oMessage, "message");
+					var dialog = new sap.m.Dialog({
+						title: "Messages",
+						contentWidth: "600px",
+						contentHeight: "600px",
+						content: that.popupView,
+						beginButton: new sap.m.Button({
+							text: "OK",
+							press: function () {
+								that.popupView.destroy();
+								dialog.close();
+							}
+						})
+					});
+
+					dialog.open();
+
 
 				},
-				error: function(e) {
+				error: function (e) {
 
 					sap.m.MessageToast.show("Error while creating ");
+					that.oGloablDiaglogBox.close();
 
 				}
-			});			
+			});
+
+
+
+
+
 		},
 		_onButtonPress: function (oEvent) {
 
@@ -416,12 +508,19 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				// if(sPath){
 				// 	var ItmNumber = oEvent.getSource().getModel().getProperty(sPath).ItmNumber
 				// }else{
-					
+
 				// }
-				var ItmNumber = oEvent.getParameter("listItem").getCells()[1].getText();
-				this.oRouter.navTo("ConditionDetails", {
-					ItmNumber: ItmNumber
-				});
+				if (sRouteName === "InsuranceRelationship_1") {
+					this.oRouter.navTo(sRouteName, {
+						context: sPath,
+						masterContext: sMasterContext
+					}, false);
+				} else {
+					var ItmNumber = oEvent.getParameter("listItem").getCells()[1].getText();
+					this.oRouter.navTo("ConditionDetails", {
+						ItmNumber: ItmNumber
+					});
+				}
 			}
 
 			if (typeof fnPromiseResolve === "function") {
@@ -541,9 +640,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 
 		},
-		
+
 		onInit: function () {
-			debugger;
+			// debugger;
+			history.pushState(null, null, location.href);
+			var that = this;
+			window.onpopstate = function () {
+				if (location.pathname === '/index.html') {
+					// that.getOwnerComponent().setCompData([]);
+				}
+			};
 			this.adminChg = this.getView().byId("idtab");
 			this.roomChg = this.getView().byId("idRoomChg");
 			this.consumable = this.getView().byId("idConsumable");
@@ -554,7 +660,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// if (this.listitem) {
 			// 	this.oTemplate = this.listitem.clone();
 			// }
-			this.oDataSer =  new sap.ui.model.json.JSONModel();
+			this.oDataSer = new sap.ui.model.json.JSONModel();
+
 			this.getView().setModel(this.oDataSer, "main");
 			this.fldVal = new sap.ui.model.json.JSONModel();
 			this.roomChgData = new sap.ui.model.json.JSONModel();
@@ -585,7 +692,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 		},
 		onExit: function () {
-
+			this.getOwnerComponent().setCompData([]);
 			// to destroy templates for bound aggregations when templateShareable is true on exit to prevent duplicateId issue
 			var aControls = [{
 				"controlId": "sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1672824753670",

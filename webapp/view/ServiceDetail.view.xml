@@ -5,6 +5,7 @@ xmlns:layout="sap.ui.layout" xmlns:sap.ui.dt="sap.ui.dt" xmlns="sap.uxap"
 	xmlns:personal="com.sap.ish.pmpa.SharedBlocks.personal"
 	xmlns:employment="com.sap.ish.pmpa.SharedBlocks.employment">
     <semantic:DetailPage id="page" navButtonPress="onNavBack" showNavButton="{device>/system/phone}" title="Case Data" 
+    
     busy="{= !(${displayView>/dataLoaded} || ${displayView>/showsMessage}) }" busyIndicatorDelay="{= ${appProperties>/detailImmediateBusy} ? 0 : ${displayView>/originalBusyDelay} }">
         <!-- <semantic:customHeaderContent>
 			<m:Button id="adaptationMode" text="{i18n>xbut.adaptui}" visible="{app>/showAdaptButton}" press="switchToAdaptionMode" sap.ui.dt:designtime="not-adaptable" />
@@ -31,7 +32,7 @@ xmlns:layout="sap.ui.layout" xmlns:sap.ui.dt="sap.ui.dt" xmlns="sap.uxap"
                         <snappedHeading>
                             <m:FlexBox fitContainer="true" alignItems="Center">
                                 
-                                <m:Title text="Arya Stark" wrapping="true" />
+                                <!-- <m:Title text="Arya Stark" wrapping="true" /> -->
                             </m:FlexBox>
                         </snappedHeading>
 
@@ -53,9 +54,11 @@ xmlns:layout="sap.ui.layout" xmlns:sap.ui.dt="sap.ui.dt" xmlns="sap.uxap"
                                     <m:OverflowToolbarLayoutData priority="NeverOverflow" />
                                 </m:layoutData>
                             </m:OverflowToolbarButton>
-                            <m:OverflowToolbarButton icon="sap-icon://pull-down" text="show section" type="Emphasized" tooltip="pull-down" />
+                            <!-- <m:OverflowToolbarButton icon="sap-icon://pull-down" text="show section" type="Emphasized" tooltip="pull-down" />
                             <m:OverflowToolbarButton icon="sap-icon://show" text="show state" tooltip="show" />
-                            <m:Button text="Toggle Footer" press="toggleFooter" />
+                            <m:Button text="Toggle Footer" press="toggleFooter" /> -->
+                            <m:Button text="" type="Transparent" icon="sap-icon://nav-back" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress"/>
+                            <m:Button text="Payment Distribution" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress1"/>
                         </actions>
                     </ObjectPageDynamicHeaderTitle>
                 </headerTitle>

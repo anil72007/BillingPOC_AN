@@ -6,7 +6,7 @@ sap.ui.define([
 		"use strict";
 
 		return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.App", {
-
+			
 			onInit : function () {
 				var oViewModel,
 					oListSelector = this.getOwnerComponent().oListSelector,

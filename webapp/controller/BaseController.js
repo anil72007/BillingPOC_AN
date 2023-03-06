@@ -1,11 +1,13 @@
 /*global history */
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
-		"sap/ui/core/routing/History"
-	], function (Controller, History) {
+		"sap/ui/core/routing/History",
+		"com/sap/build/standard/pocPatientServiceAndInvoice/utils/format"
+	], function (Controller, History, format) {
 		"use strict";
 
 		return Controller.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.BaseController", {
+			formatter: format,
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
 			 * @public

@@ -1,0 +1,268 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.sap.build.standard.pocPatientServiceAndInvoice.controller.InsuranceRelationship_2" 
+xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified">
+    <Page title="Insurance Relationships" showHeader="true" showFooter="true" showNavButton="true" navButtonPress="_onPageNavButtonPress">
+        <content>
+            <IconTabBar expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Ok">
+                <items>
+                    <IconTabSeparator icon="" iconDensityAware="false"/>
+                    <IconTabFilter icon="sap-icon://add" iconColor="Positive" text="" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                            <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                                <items>
+                                    <SearchField placeholder="Search" showSearchButton="true" visible="true" width="112px"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <ObjectIdentifier title="" text="" titleActive="false" visible="true"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <DateRangeSelection id="sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5" dateValue="{staticDataModel>/sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5/dateValue}" secondDateValue="{staticDataModel>/sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5/secondDateValue}" width="157px" displayFormat="short" required="false" valueStateText="Invalid entry" enabled="true" visible="true" change="_onDateRangeSelectionChange"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <ComboBox selectedKey="Ordinary" editable="true" enabled="true" visible="true" width="108px" valueState="None" maxWidth="100%">
+                                        <items>
+                                            <core:Item text="Ordinary Contract" enabled="true" key="Ordinary Contract"/>
+                                            <core:Item text="Special Contract" enabled="true" key="Special Contract"/>
+                                        </items>
+                                    </ComboBox>
+                                    <ToggleButton pressed="true" text="Activated" icon="sap-icon://activate" iconFirst="true" width="auto" enabled="true" visible="true"/>
+                                    <Button text="Remark" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress"/>
+                                    <unified:FileUploader buttonText="" style="Default" icon="sap-icon://upload" buttonOnly="false" enabled="true" width="auto" iconFirst="true" uploadOnChange="true" maximumFileSize="10" mimeType="image/jpeg,image/gif,image/png,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" uploadComplete="_onFileUploaderUploadComplete" change="_onFileUploaderChange" typeMissmatch="_onFileUploaderTypeMissmatch" fileSizeExceed="_onFileUploaderFileSizeExceed">
+                                        <unified:headerParameters/>
+                                        <unified:parameters/>
+                                        <unified:xhrSettings/>
+                                    </unified:FileUploader>
+                                    <Button text="" type="Default" icon="sap-icon://display" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                </items>
+                                <layoutData/>
+                            </HBox>
+                            <Table width="auto" noDataText="" mode="None" showSeparators="All" growing="true" growingThreshold="20" 
+                            growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar/>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Coverage Fix" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Coverage %" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem type="Active">
+                                        <cells>
+                                            <Input value="0" type="Number" description="SGD" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                            <Input value="" type="Number" description="%" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                            <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                                <items>
+                                    <Button text="" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress1"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <Button text="" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                </items>
+                                <layoutData/>
+                            </HBox>
+                            <Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar>
+                                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                                        <content>
+                                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </content>
+                                    </Toolbar>
+                                </infoToolbar>
+                                <headerToolbar/>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Service" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="In/exclusive" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Qty" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Fix Amount" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="%" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items/>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabFilter icon="sap-icon://addresses" iconColor="Positive" text="{Name}" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                            <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                                <items>
+                                    <ToolbarSpacer width="20px"/>
+                                    <ObjectIdentifier title="{path: 'Case', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 }}" text="" titleActive="false" visible="true"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <DateRangeSelection id="sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225" dateValue="{staticDataModel>/sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225/dateValue}" secondDateValue="{staticDataModel>/sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225/secondDateValue}" width="157px" displayFormat="short" required="false" valueStateText="Invalid entry" enabled="true" visible="true" change="_onDateRangeSelectionChange1"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <ComboBox selectedKey="Ordinary" editable="true" enabled="true" visible="true" width="108px" valueState="None" maxWidth="100%">
+                                        <items>
+                                            <core:Item text="Ordinary Contract" enabled="true" key="Ordinary Contract"/>
+                                            <core:Item text="Special Contract" enabled="true" key="Special Contract"/>
+                                        </items>
+                                    </ComboBox>
+                                    <ToggleButton pressed="true" text="Activated" icon="sap-icon://activate" iconFirst="true" width="auto" enabled="true" visible="true"/>
+                                    <Button text="Remark" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress2"/>
+                                    <unified:FileUploader buttonText="" style="Default" icon="sap-icon://upload" buttonOnly="false" enabled="true" width="auto" iconFirst="true" uploadOnChange="true" maximumFileSize="10" mimeType="image/jpeg,image/gif,image/png,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" uploadComplete="_onFileUploaderUploadComplete1" change="_onFileUploaderChange1" typeMissmatch="_onFileUploaderTypeMissmatch1" fileSizeExceed="_onFileUploaderFileSizeExceed1">
+                                        <unified:headerParameters/>
+                                        <unified:parameters/>
+                                        <unified:xhrSettings/>
+                                    </unified:FileUploader>
+                                    <Button text="" type="Default" icon="sap-icon://display" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                    <ToolbarSpacer width=""/>
+                                    <CheckBox text="Verified" selected="true" editable="false" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true"/>
+                                    <ToolbarSpacer width=""/>
+                                    <Text text="{Control_No}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </items>
+                                <layoutData/>
+                            </HBox>
+                            <Table id="sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1" width="auto" noDataText="" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/InsuranceSet', templateShareable:true}">
+                                <infoToolbar/>
+                                <headerToolbar/>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Coverage Fix" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Coverage %" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Discount Fix" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Discount %" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem type="Active">
+                                        <cells>
+                                            <Input value="{path: 'Coverage_Max_Fix', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 }}" type="Number" description="SGD" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="{path: 'Case', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 }}" maxLength="0"/>
+                                            <Input value="{path: 'Coverage_Max_Percentage', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 }}" type="Number" description="%" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="{path: 'Coverage_Max_Fix', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 }}" maxLength="0"/>
+                                            <Input type="Text" description="SGD" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                            <Input type="Text" description="%" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                            <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                                <items>
+                                    <Button text="" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                    <ToolbarSpacer width="20px"/>
+                                    <Button text="" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                </items>
+                                <layoutData/>
+                            </HBox>
+                            <Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar>
+                                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                                        <content>
+                                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </content>
+                                    </Toolbar>
+                                </infoToolbar>
+                                <headerToolbar/>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Service" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="In/exclusive" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Qty" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Coverage Fix" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Coverage %" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Discount Fix" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Discount %" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items/>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator icon="" iconDensityAware="false"/>
+                </items>
+                <content>
+                    <Text text="Tab Bar Content goes here ..." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                </content>
+            </IconTabBar>
+        </content>
+        <footer>
+            <OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
+                <content>
+                    <ToolbarSpacer width=""/>
+                    <Button text="Save" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress3"/>
+                    <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                </content>
+            </OverflowToolbar>
+        </footer>
+        <headerContent/>
+    </Page>
+</mvc:View>

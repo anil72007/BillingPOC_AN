@@ -194,7 +194,8 @@ sap.ui.define([
 		},
 		_onButtonPress: function (oEvent) {
 			// debugger;
-
+			var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
+			var oModel = new sap.ui.model.odata.ODataModel(url, true);
 			// var a = { "CreatDate" : "",
 			// 		  "Currency"  : "SGD",
 			// 		  "DocNumber" : "1000000036",
@@ -225,36 +226,73 @@ sap.ui.define([
 			// var headItem = this.cData.results[0].To_Items.results.filter(item => item.ItemCateg === 'ZADH');
 			// var headItem = this.getView().byId("idtab").getModel().getData();
 			// var existingItem = headItem[headItem.length - 1];
-			var lineItem = parseInt(this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[1].getText());
+			var itemno = this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[1].getText();
+			var lineItem = parseInt(itemno, 10);
 
 			let currentDate = new Date();
 			let options = { dateStyle: 'short' };
 			let dateString = currentDate.toLocaleDateString(undefined, options);
 			var oData = this.getView().getModel("main").getData();
+			let now = new Date();
+			let currentTime = "/Date(" + now.getTime() + ")/";
+
+			var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({
+				pattern: "kk:mm:ss"
+			});
+			var tz = new Date(0).getTimezoneOffset() * 60 * 1000;
+			var timeStr = timeFormat.format(new Date(now.ms + tz));
+			
+			
 			for (var i = 0; i < addItems.length; i++) {
 				lineItem = lineItem + 10;
-				var data = { "CreatDate" : new Date(),
-						  "Currency"  : "SGD",
-						  "DocNumber" : this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
-						  "HgLvItem"  : "000000",
-						  "ItemCateg" : "ZADH",
-						  "ItmNumber" : lineItem,
-						  "MatEntrd"  : this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
-						  "Material"  : this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
-						  "MatlGroup" : "OSS000000",
-						  "NetValue"  : "", 
-						  "ObjNrIt"   : "",
-						  "PrcGroup1"   : "",
-						  "PrcGroup2"   : "",
-						  "PrcGroup3"   : "",
-						  "PrcGroup4"   : "",
-						  "PrcGroup5"   : "",
-						  "RecTime"   : "",
-						  "ReqQty" : "1",
-						  "SalesUnit" : "",
-						  "ShortText" : this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[1].getText(),
-						  "Mode"  : "INS"};
+				let res = lineItem.toString().padStart(itemno.length, '0')
+				var data = {
+					"CreatDate": now,
+					"Currency": "SGD",
+					"DocNumber": this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
+					"HgLvItem": "000000",
+					"ItemCateg": "ZADH",
+					"ItmNumber": res,
+					"MatEntrd": this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
+					"Material": this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle(),
+					"MatlGroup": "OSS000000",
+					"NetValue": "0",
+					"ObjNrIt": "",
+					"PrcGroup1": "",
+					"PrcGroup2": "",
+					"PrcGroup3": "",
+					"PrcGroup4": "",
+					"PrcGroup5": "",
+					"ReqQty": "1",
+					"SalesUnit": "",
+					"ShortText": this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[1].getText(),
+					"Mode": "INS"
+				};
 				oData.To_Items.results.push(data);
+				var efilter = "$filter=ITM_NUMBER eq '" + res + "' and MATERIAL eq '" + this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle() + "'";
+
+				var url = "SimPriceHeadSet?$expand=To_SimPrice" + "&&" + efilter;
+				var that = this;
+				oModel.read(url, null, null, null,
+					function onSuccess(oData, oResponse) {
+						debugger;
+						for (var i = 0; i < oData.results[0].To_SimPrice.results.length; i++) {
+							that.getView().getModel("main").getData().To_ItemCond.results.push(oData.results[0].To_SimPrice.results[i]);
+						}
+
+
+					},
+					function _onError(oError) {
+						debugger;
+					}
+
+				);
+				oModel.attachRequestSent(function () {
+					sap.ui.core.BusyIndicator.show(100);
+				});
+				oModel.attachRequestCompleted(function () {
+					sap.ui.core.BusyIndicator.hide();
+				});
 				// var columnListItemNewLine = new sap.m.ColumnListItem({
 				// 	highlight: "Warning",
 				// 	selected: true,
@@ -305,17 +343,17 @@ sap.ui.define([
 				// 	// Add the CSS class to the new row
 				// 	selectedRow.addStyleClass("highlighted-row");
 				//   });
-				var a = {
-					"SdDoc" : this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
-					"ItmNumber" : lineItem.toString(),
-					"CondType" : "PR00",
-					"CondTypeDesc" : "Price",
-					"CondValue" : ""
-				};
+				// var a = {
+				// 	"SdDoc" : this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
+				// 	"ItmNumber" : lineItem.toString(),
+				// 	"CondType" : "PR00",
+				// 	"CondTypeDesc" : "Price",
+				// 	"CondValue" : ""
+				// };
 				// this.cData.results[0].To_ItemCond.results.push(a);
-				this.getView().getModel("main").getData().To_ItemCond.results.push(a);
+				// this.getView().getModel("main").getData().To_ItemCond.results.push(a);
 				// this.getView().byId("idtab").addItem(columnListItemNewLine);
-				
+
 			}
 			this.getView().getModel("main").setData(oData);
 			this.getOwnerComponent().setCompData(this.cData);

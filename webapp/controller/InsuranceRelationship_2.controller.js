@@ -3,11 +3,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"./InsuranceRelationshipRemark", "./Dialog5",
 	"./utilities",
 	"sap/ui/core/routing/History"
-], function (BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History) {
+], function(BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History) {
 	"use strict";
 
-	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.InsuranceRelationship_1", {
-		handleRouteMatched: function (oEvent) {
+	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.InsuranceRelationship_2", {
+		handleRouteMatched: function(oEvent) {
 			debugger;
 			var sAppId = "App6352534280e30701c54b4b6b";
 
@@ -21,7 +21,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 			} else {
 				if (this.getOwnerComponent().getComponentData()) {
-					var patternConvert = function (oParam) {
+					var patternConvert = function(oParam) {
 						if (Object.keys(oParam).length !== 0) {
 							for (var prop in oParam) {
 								if (prop !== "sourcePrototype" && prop.includes("Set")) {
@@ -51,78 +51,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		onSubmitButtonPressed: function (oEvent) {
-			debugger;
-			var oBindingContext = oEvent.getSource().getBindingContext();
-
-			return new Promise(function (fnResolve) {
-
-				this.doNavigate("InsuranceRelationship_2", oBindingContext, fnResolve, "", oEvent);
-			}.bind(this)).catch(function (err) {
-				if (err !== undefined) {
-					MessageBox.error(err.message);
-				}
-			});
-		},
-		doNavigate: function (sRouteName, oBindingContext, fnPromiseResolve, sViaRelation, oEvent) {
-			var sPath = (oBindingContext) ? oBindingContext.getPath() : null;
-			var oModel = (oBindingContext) ? oBindingContext.getModel() : null;
-
-			var sEntityNameSet;
-			if (sPath !== null && sPath !== "") {
-				if (sPath.substring(0, 1) === "/") {
-					sPath = sPath.substring(1);
-				}
-				sEntityNameSet = sPath.split("(")[0];
-			}
-			var sNavigationPropertyName;
-			var sMasterContext = this.sMasterContext ? this.sMasterContext : sPath;
-
-			if (sEntityNameSet !== null) {
-				sNavigationPropertyName = sViaRelation || this.getOwnerComponent().getNavigationPropertyForNavigationWithContext(sEntityNameSet, sRouteName);
-			}
-			if (sNavigationPropertyName !== null && sNavigationPropertyName !== undefined) {
-				if (sNavigationPropertyName === "") {
-					this.oRouter.navTo(sRouteName, {
-						context: sPath,
-						masterContext: sMasterContext
-					}, false);
-				} else {
-					oModel.createBindingContext(sNavigationPropertyName, oBindingContext, null, function (bindingContext) {
-						if (bindingContext) {
-							sPath = bindingContext.getPath();
-							if (sPath.substring(0, 1) === "/") {
-								sPath = sPath.substring(1);
-							}
-						} else {
-							sPath = "undefined";
-						}
-
-						// If the navigation is a 1-n, sPath would be "undefined" as this is not supported in Build
-						if (sPath === "undefined") {
-							this.oRouter.navTo(sRouteName);
-						} else {
-							this.oRouter.navTo(sRouteName, {
-								context: sPath,
-								masterContext: sMasterContext
-							}, false);
-						}
-					}.bind(this));
-				}
-			} else {
-				this.oRouter.navTo(sRouteName, {
-					context: sPath,
-					masterContext: sMasterContext
-				}, false);
-			}
-
-			if (typeof fnPromiseResolve === "function") {
-				fnPromiseResolve();
-			}
-
-		},
-
-		_onPageNavButtonPress: function () {
+		_onPageNavButtonPress: function() {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
 			var oQueryParams = this.getQueryParameters(window.location);
@@ -135,7 +64,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		getQueryParameters: function (oLocation) {
+		getQueryParameters: function(oLocation) {
 			var oQuery = {};
 			var aParams = oLocation.search.substring(1).split("&");
 			for (var i = 0; i < aParams.length; i++) {
@@ -145,14 +74,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			return oQuery;
 
 		},
-		formatDateUTCtoLocale: function (dDate) {
+		formatDateUTCtoLocale: function(dDate) {
 			if (dDate) {
 				return new Date(dDate.getUTCFullYear(), dDate.getUTCMonth(), dDate.getUTCDate());
 			}
 			return dDate;
 
 		},
-		_onDateRangeSelectionChange: function (oEvent) {
+		_onDateRangeSelectionChange: function(oEvent) {
 
 			var oDateRangeSelection = oEvent.getSource();
 			var oBindingContext = oDateRangeSelection.getBindingContext();
@@ -176,7 +105,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		_onButtonPress: function (oEvent) {
+		_onButtonPress: function(oEvent) {
 
 			var sDialogName = "InsuranceRelationshipRemark";
 			this.mDialogs = this.mDialogs || {};
@@ -195,23 +124,23 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		_onFileUploaderUploadComplete: function () {
+		_onFileUploaderUploadComplete: function() {
 			// Please implement
 
 		},
-		_onFileUploaderChange: function () {
+		_onFileUploaderChange: function() {
 			// Please implement
 
 		},
-		_onFileUploaderTypeMissmatch: function () {
+		_onFileUploaderTypeMissmatch: function() {
 			// Please implement
 
 		},
-		_onFileUploaderFileSizeExceed: function () {
+		_onFileUploaderFileSizeExceed: function() {
 			// Please implement
 
 		},
-		_onButtonPress1: function (oEvent) {
+		_onButtonPress1: function(oEvent) {
 
 			var sDialogName = "Dialog5";
 			this.mDialogs = this.mDialogs || {};
@@ -230,14 +159,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		formatDateUTCtoLocale1: function (dDate) {
+		formatDateUTCtoLocale1: function(dDate) {
 			if (dDate) {
 				return new Date(dDate.getUTCFullYear(), dDate.getUTCMonth(), dDate.getUTCDate());
 			}
 			return dDate;
 
 		},
-		_onDateRangeSelectionChange1: function (oEvent) {
+		_onDateRangeSelectionChange1: function(oEvent) {
 
 			var oDateRangeSelection = oEvent.getSource();
 			var oBindingContext = oDateRangeSelection.getBindingContext();
@@ -261,7 +190,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		_onButtonPress2: function (oEvent) {
+		_onButtonPress2: function(oEvent) {
 
 			var sDialogName = "InsuranceRelationshipRemark";
 			this.mDialogs = this.mDialogs || {};
@@ -280,29 +209,29 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		_onFileUploaderUploadComplete1: function () {
+		_onFileUploaderUploadComplete1: function() {
 			// Please implement
 
 		},
-		_onFileUploaderChange1: function () {
+		_onFileUploaderChange1: function() {
 			// Please implement
 
 		},
-		_onFileUploaderTypeMissmatch1: function () {
+		_onFileUploaderTypeMissmatch1: function() {
 			// Please implement
 
 		},
-		_onFileUploaderFileSizeExceed1: function () {
+		_onFileUploaderFileSizeExceed1: function() {
 			// Please implement
 
 		},
-		_onButtonPress3: function (oEvent) {
+		_onButtonPress3: function(oEvent) {
 
 			oEvent = jQuery.extend(true, {}, oEvent);
-			return new Promise(function (fnResolve) {
-				fnResolve(true);
-			})
-				.then(function (result) {
+			return new Promise(function(fnResolve) {
+					fnResolve(true);
+				})
+				.then(function(result) {
 					var oView = this.getView(),
 						oController = this,
 						status = true,
@@ -311,16 +240,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						status = this.handleChangeValuestate(requiredFieldInfo, oView);
 					}
 					if (status) {
-						return new Promise(function (fnResolve, fnReject) {
+						return new Promise(function(fnResolve, fnReject) {
 							var oModel = oController.oModel;
 
-							var fnResetChangesAndReject = function (sMessage) {
+							var fnResetChangesAndReject = function(sMessage) {
 								oModel.resetChanges();
 								fnReject(new Error(sMessage));
 							};
 							if (oModel && oModel.hasPendingChanges()) {
 								oModel.submitChanges({
-									success: function (oResponse) {
+									success: function(oResponse) {
 										var oBatchResponse = oResponse.__batchResponses[0];
 										var oChangeResponse = oBatchResponse.__changeResponses && oBatchResponse.__changeResponses[0];
 										if (oChangeResponse && oChangeResponse.data) {
@@ -343,7 +272,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 											fnResolve();
 										}
 									},
-									error: function (oError) {
+									error: function(oError) {
 										fnReject(new Error(oError.message));
 									}
 								});
@@ -353,7 +282,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						});
 					}
 				}.bind(this))
-				.then(function (result) {
+				.then(function(result) {
 					if (result === false) {
 						return false;
 					} else {
@@ -369,16 +298,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						}
 
 					}
-				}.bind(this)).catch(function (err) {
+				}.bind(this)).catch(function(err) {
 					if (err !== undefined) {
 						MessageBox.error(err.message);
 					}
 				});
 		},
-		handleChangeValuestate: function (requiredFieldInfo, oView) {
+		handleChangeValuestate: function(requiredFieldInfo, oView) {
 			var status = true;
 			if (requiredFieldInfo) {
-				requiredFieldInfo.forEach(function (requiredinfo) {
+				requiredFieldInfo.forEach(function(requiredinfo) {
 					var input = oView.byId(requiredinfo.id);
 					if (input) {
 						input.setValueState("None"); //initially set ValueState to None
@@ -395,7 +324,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			return status;
 
 		},
-		applyFiltersAndSorters: function (sControlId, sAggregationName, chartBindingInfo) {
+		applyFiltersAndSorters: function(sControlId, sAggregationName, chartBindingInfo) {
 			if (chartBindingInfo) {
 				var oBindingInfo = chartBindingInfo;
 			} else {
@@ -413,7 +342,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 
 		},
-		updateBindingOptions: function (sCollectionId, oBindingData, sSourceId) {
+		updateBindingOptions: function(sCollectionId, oBindingData, sSourceId) {
 			this.mBindingOptions = this.mBindingOptions || {};
 			this.mBindingOptions[sCollectionId] = this.mBindingOptions[sCollectionId] || {};
 
@@ -453,7 +382,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			};
 
 		},
-		createFiltersAndSorters: function () {
+		createFiltersAndSorters: function() {
 			this.mBindingOptions = {};
 			var oBindingData, aPropertyFilters;
 			oBindingData = {};
@@ -466,18 +395,18 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this.updateBindingOptions("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", oBindingData);
 
 		},
-		onInit: function () {
+		onInit: function() {
 			debugger;
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.oRouter.getTarget("InsuranceRelationship_1").attachDisplay(jQuery.proxy(this.handleRouteMatched, this));
 			var oView = this.getView();
 			oView.addEventDelegate({
-				onBeforeShow: function () {
+				onBeforeShow: function() {
 					if (sap.ui.Device.system.phone) {
 						var oPage = oView.getContent()[0];
 						if (oPage.getShowNavButton && !oPage.getShowNavButton()) {
 							oPage.setShowNavButton(true);
-							oPage.attachNavButtonPress(function () {
+							oPage.attachNavButtonPress(function() {
 								this.oRouter.navTo("ServiceList", {}, true);
 							}.bind(this));
 						}
@@ -494,38 +423,38 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oView.setModel(oModel, "staticDataModel");
 			self.oBindingParameters = {};
 
-			// oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5"] = {};
+			oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5"] = {};
 
-			// oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5"]["dateValue"] = new Date("2022-05-01T00:00:00.000Z");
+			oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5"]["dateValue"] = new Date("2022-05-01T00:00:00.000Z");
 
-			// oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5"]["secondDateValue"] = new Date("9999-12-31T00:00:00.000Z");
+			oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1668584461814-content-sap_m_HBox-1-items-sap_m_DateRangeSelection-5"]["secondDateValue"] = new Date("9999-12-31T00:00:00.000Z");
 
-			// oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225"] = {};
+			oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225"] = {};
 
-			// oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225"]["dateValue"] = new Date("2023-01-11T00:00:00.000Z");
+			oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225"]["dateValue"] = new Date("2023-01-11T00:00:00.000Z");
 
-			// oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225"]["secondDateValue"] = new Date("9999-12-31T00:00:00.000Z");
+			oData["sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-sap_m_HBox-1668138541872-items-sap_m_DateRangeSelection-1668138553225"]["secondDateValue"] = new Date("9999-12-31T00:00:00.000Z");
 
-			// oView.getModel("staticDataModel").setData(oData, true);
+			oView.getModel("staticDataModel").setData(oData, true);
 
-			// function dateDimensionFormatter(oDimensionValue, sTextValue) {
-			// 	var oValueToFormat = sTextValue !== undefined ? sTextValue : oDimensionValue;
-			// 	if (oValueToFormat instanceof Date) {
-			// 		var oFormat = sap.ui.core.format.DateFormat.getDateInstance({
-			// 			style: "short"
-			// 		});
-			// 		return oFormat.format(oValueToFormat);
-			// 	}
-			// 	return oValueToFormat;
-			// }
+			function dateDimensionFormatter(oDimensionValue, sTextValue) {
+				var oValueToFormat = sTextValue !== undefined ? sTextValue : oDimensionValue;
+				if (oValueToFormat instanceof Date) {
+					var oFormat = sap.ui.core.format.DateFormat.getDateInstance({
+						style: "short"
+					});
+					return oFormat.format(oValueToFormat);
+				}
+				return oValueToFormat;
+			}
 
-			// this.mAggregationBindingOptions = {};
-			// this.createFiltersAndSorters();
+			this.mAggregationBindingOptions = {};
+			this.createFiltersAndSorters();
 
-			// this.applyFiltersAndSorters("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", "items");
+			this.applyFiltersAndSorters("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", "items");
 
 		},
-		onExit: function () {
+		onExit: function() {
 
 			// to destroy templates for bound aggregations when templateShareable is true on exit to prevent duplicateId issue
 			var aControls = [{
@@ -547,7 +476,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		onAfterRendering: function () {
+		onAfterRendering: function() {
 
 			var oChart,
 				self = this,

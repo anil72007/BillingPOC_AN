@@ -5,10 +5,11 @@ sap.ui.define([
 	"../model/GroupState",
 	"sap/ui/core/routing/History",
 	'sap/ui/model/Filter',
-	'sap/ui/model/FilterOperator'
-], function (ManagedObject, MessageBox, Utilities, GroupState,History, Filter, FilterOperator) {
-
-	return ManagedObject.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.InvoiceList", {
+	'sap/ui/model/FilterOperator',
+	"com/sap/build/standard/pocPatientServiceAndInvoice/utils/format"
+], function (ManagedObject, MessageBox, Utilities, GroupState,History, Filter, FilterOperator,format) {
+	formatter: format
+	return ManagedObject.extend("com.sap.build.stand	ard.pocPatientServiceAndInvoice.controller.InvoiceList", {
 		constructor: function (oView) {
 
 			this._oView = oView;

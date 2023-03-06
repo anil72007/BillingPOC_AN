@@ -1,5 +1,5 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceList" xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:layout="sap.ui.layout">
-    <Page title="Detail Page" showHeader="true" showFooter="true" showNavButton="false">
+    <Page title="Detail Page" showHeader="true" showFooter="true" showNavButton="true" navButtonPress="onNavBack">
         <content>
             <ObjectHeader intro="{main>/CaseType}" title="{main>/NameFirst} {main>/NameLast}" icon="sap-icon://person-placeholder" 
             number="{main>/CaseOrder}" numberUnit="{main>/PatientId}" numberState="None" titleActive="false" backgroundDesign="Translucent" condensed="false" visible="true">
@@ -40,7 +40,8 @@
                             </Menu>
                         </menu>
                     </MenuButton>
-                    <Button text="Insurance Relationship" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress1"/>
+                    <Button text="Insurance Relationship" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" 
+                    press="_onButtonPress1"/>
                     <ToolbarSpacer width="120px"/>
                     <ToggleButton pressed="true" text="" icon="sap-icon://error" iconFirst="true" width="auto" enabled="true" visible="true" press="_onToggleButtonPress"/>
                 </items>

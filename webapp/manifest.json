@@ -138,6 +138,13 @@
                     "viewLevel": 1,
                     "transition": "show"
                 },
+                "InsuranceRelationship_2": {
+                    "controlAggregation": "pages",
+                    "viewName": "InsuranceRelationship_2",
+                    "viewId": "InsuranceRelationship_2",
+                    "viewLevel": 1,
+                    "transition": "show"
+                },
                 "ServiceDetailSearchSearch": {
                     "controlAggregation": "pages",
                     "viewName": "ServiceDetailSearchSearch",
@@ -201,6 +208,14 @@
                     "target": [
                         "CaseList",
                         "InsuranceRelationship_1"
+                    ]
+                },
+                {
+                    "pattern": "CaseList/InsuranceRelationship_2/:context:",
+                    "name": "InsuranceRelationship_2",
+                    "target": [
+                        "CaseList",
+                        "InsuranceRelationship_2"
                     ]
                 },
                 {

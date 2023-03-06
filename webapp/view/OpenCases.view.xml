@@ -82,12 +82,15 @@
                 tableType="ResponsiveTable"
                 useExportToExcel="true"
                 useVariantManagement="false"
-                useTablePersonalisation="true"
+                useTablePersonalisation="false"
                 header="Line Items"
                 showRowCount="true"
+                
                 beforeRebindTable="onBeforeRebindTable"
+                
                 ignoredFields="CaseOrder,CaseId,CaseType,PatientId,NameFirst,NameLast,Age,Birthdate,Sex"
             >
+                
                 <Table mode="SingleSelectMaster" itemPress="onItemPressSupp">
                     <columns>
                         <Column mergeDuplicates="true">
@@ -138,12 +141,7 @@
                             </customData>
                             <Text text="Sex" />
                         </Column>
-                        <!-- <Column hAlign='End'>
-                            <customData>
-                                <core:CustomData key="p13nData" value='\{"columnKey": "CaseStatus", "leadingProperty": "CaseStatus"}' />
-                            </customData>
-                            <Text text="Case Status" />
-                        </Column> -->
+
                     </columns>
                     <items>
                         <ColumnListItem type="Navigation">
@@ -156,10 +154,7 @@
                                 <smartlink:SmartLink text="{NameLast}" semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
                                 <smartlink:SmartLink text="{Age}" semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
                                 <smartlink:SmartLink text="{Sex}" semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" />
-                                <!-- <smartlink:SmartLink text="{Birthdate}" semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" /> -->
-                                <!-- <smartlink:SmartLink text="{CaseStatus}" 
-                                semanticObject="demokit_smartlink_example_01_SemanticObjectPrice" enableAvailableActionsPersonalization="false" /> -->
-                            </cells>
+                             </cells>
                         </ColumnListItem>
                     </items>
                 </Table>

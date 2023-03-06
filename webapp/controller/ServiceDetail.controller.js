@@ -3,8 +3,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"./PaymentDistribution",
 	"./utilities",
 	"sap/ui/core/routing/History",
-	'sap/ui/core/Fragment',
-], function(BaseController, MessageBox, PaymentDistribution, Utilities, History, Fragment) {
+	"sap/ui/core/Fragment",
+	"com/sap/build/standard/pocPatientServiceAndInvoice/controller/BaseController"
+], function(BaseController, MessageBox, PaymentDistribution, Utilities, History, Fragment,BaseController1) {
 	"use strict";
 
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceDetail", {
