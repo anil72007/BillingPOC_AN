@@ -3,11 +3,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"./InsuranceRelationshipRemark", "./Dialog5",
 	"./utilities",
 	"sap/ui/core/routing/History"
-], function(BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History) {
+], function (BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History) {
 	"use strict";
 
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.InsuranceRelationship_2", {
-		handleRouteMatched: function(oEvent) {
+		handleRouteMatched: function (oEvent) {
 			debugger;
 			var sAppId = "App6352534280e30701c54b4b6b";
 
@@ -21,7 +21,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 			} else {
 				if (this.getOwnerComponent().getComponentData()) {
-					var patternConvert = function(oParam) {
+					var patternConvert = function (oParam) {
 						if (Object.keys(oParam).length !== 0) {
 							for (var prop in oParam) {
 								if (prop !== "sourcePrototype" && prop.includes("Set")) {
@@ -51,7 +51,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		_onPageNavButtonPress: function() {
+		_onPageNavButtonPress: function () {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
 			var oQueryParams = this.getQueryParameters(window.location);
@@ -64,7 +64,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		getQueryParameters: function(oLocation) {
+		getQueryParameters: function (oLocation) {
 			var oQuery = {};
 			var aParams = oLocation.search.substring(1).split("&");
 			for (var i = 0; i < aParams.length; i++) {
@@ -74,14 +74,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			return oQuery;
 
 		},
-		formatDateUTCtoLocale: function(dDate) {
+		formatDateUTCtoLocale: function (dDate) {
 			if (dDate) {
 				return new Date(dDate.getUTCFullYear(), dDate.getUTCMonth(), dDate.getUTCDate());
 			}
 			return dDate;
 
 		},
-		_onDateRangeSelectionChange: function(oEvent) {
+		_onDateRangeSelectionChange: function (oEvent) {
 
 			var oDateRangeSelection = oEvent.getSource();
 			var oBindingContext = oDateRangeSelection.getBindingContext();
@@ -105,7 +105,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		_onButtonPress: function(oEvent) {
+		_onButtonPress: function (oEvent) {
 
 			var sDialogName = "InsuranceRelationshipRemark";
 			this.mDialogs = this.mDialogs || {};
@@ -124,23 +124,23 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		_onFileUploaderUploadComplete: function() {
+		_onFileUploaderUploadComplete: function () {
 			// Please implement
 
 		},
-		_onFileUploaderChange: function() {
+		_onFileUploaderChange: function () {
 			// Please implement
 
 		},
-		_onFileUploaderTypeMissmatch: function() {
+		_onFileUploaderTypeMissmatch: function () {
 			// Please implement
 
 		},
-		_onFileUploaderFileSizeExceed: function() {
+		_onFileUploaderFileSizeExceed: function () {
 			// Please implement
 
 		},
-		_onButtonPress1: function(oEvent) {
+		_onButtonPress1: function (oEvent) {
 
 			var sDialogName = "Dialog5";
 			this.mDialogs = this.mDialogs || {};
@@ -159,14 +159,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		formatDateUTCtoLocale1: function(dDate) {
+		formatDateUTCtoLocale1: function (dDate) {
 			if (dDate) {
 				return new Date(dDate.getUTCFullYear(), dDate.getUTCMonth(), dDate.getUTCDate());
 			}
 			return dDate;
 
 		},
-		_onDateRangeSelectionChange1: function(oEvent) {
+		_onDateRangeSelectionChange1: function (oEvent) {
 
 			var oDateRangeSelection = oEvent.getSource();
 			var oBindingContext = oDateRangeSelection.getBindingContext();
@@ -190,7 +190,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		_onButtonPress2: function(oEvent) {
+		_onButtonPress2: function (oEvent) {
 
 			var sDialogName = "InsuranceRelationshipRemark";
 			this.mDialogs = this.mDialogs || {};
@@ -209,29 +209,29 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		_onFileUploaderUploadComplete1: function() {
+		_onFileUploaderUploadComplete1: function () {
 			// Please implement
 
 		},
-		_onFileUploaderChange1: function() {
+		_onFileUploaderChange1: function () {
 			// Please implement
 
 		},
-		_onFileUploaderTypeMissmatch1: function() {
+		_onFileUploaderTypeMissmatch1: function () {
 			// Please implement
 
 		},
-		_onFileUploaderFileSizeExceed1: function() {
+		_onFileUploaderFileSizeExceed1: function () {
 			// Please implement
 
 		},
-		_onButtonPress3: function(oEvent) {
+		_onButtonPress3: function (oEvent) {
 
 			oEvent = jQuery.extend(true, {}, oEvent);
-			return new Promise(function(fnResolve) {
-					fnResolve(true);
-				})
-				.then(function(result) {
+			return new Promise(function (fnResolve) {
+				fnResolve(true);
+			})
+				.then(function (result) {
 					var oView = this.getView(),
 						oController = this,
 						status = true,
@@ -240,16 +240,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						status = this.handleChangeValuestate(requiredFieldInfo, oView);
 					}
 					if (status) {
-						return new Promise(function(fnResolve, fnReject) {
+						return new Promise(function (fnResolve, fnReject) {
 							var oModel = oController.oModel;
 
-							var fnResetChangesAndReject = function(sMessage) {
+							var fnResetChangesAndReject = function (sMessage) {
 								oModel.resetChanges();
 								fnReject(new Error(sMessage));
 							};
 							if (oModel && oModel.hasPendingChanges()) {
 								oModel.submitChanges({
-									success: function(oResponse) {
+									success: function (oResponse) {
 										var oBatchResponse = oResponse.__batchResponses[0];
 										var oChangeResponse = oBatchResponse.__changeResponses && oBatchResponse.__changeResponses[0];
 										if (oChangeResponse && oChangeResponse.data) {
@@ -272,7 +272,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 											fnResolve();
 										}
 									},
-									error: function(oError) {
+									error: function (oError) {
 										fnReject(new Error(oError.message));
 									}
 								});
@@ -282,7 +282,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						});
 					}
 				}.bind(this))
-				.then(function(result) {
+				.then(function (result) {
 					if (result === false) {
 						return false;
 					} else {
@@ -298,16 +298,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						}
 
 					}
-				}.bind(this)).catch(function(err) {
+				}.bind(this)).catch(function (err) {
 					if (err !== undefined) {
 						MessageBox.error(err.message);
 					}
 				});
 		},
-		handleChangeValuestate: function(requiredFieldInfo, oView) {
+		handleChangeValuestate: function (requiredFieldInfo, oView) {
 			var status = true;
 			if (requiredFieldInfo) {
-				requiredFieldInfo.forEach(function(requiredinfo) {
+				requiredFieldInfo.forEach(function (requiredinfo) {
 					var input = oView.byId(requiredinfo.id);
 					if (input) {
 						input.setValueState("None"); //initially set ValueState to None
@@ -324,7 +324,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			return status;
 
 		},
-		applyFiltersAndSorters: function(sControlId, sAggregationName, chartBindingInfo) {
+		applyFiltersAndSorters: function (sControlId, sAggregationName, chartBindingInfo) {
 			if (chartBindingInfo) {
 				var oBindingInfo = chartBindingInfo;
 			} else {
@@ -342,7 +342,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 
 		},
-		updateBindingOptions: function(sCollectionId, oBindingData, sSourceId) {
+		updateBindingOptions: function (sCollectionId, oBindingData, sSourceId) {
 			this.mBindingOptions = this.mBindingOptions || {};
 			this.mBindingOptions[sCollectionId] = this.mBindingOptions[sCollectionId] || {};
 
@@ -382,7 +382,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			};
 
 		},
-		createFiltersAndSorters: function() {
+		createFiltersAndSorters: function () {
 			this.mBindingOptions = {};
 			var oBindingData, aPropertyFilters;
 			oBindingData = {};
@@ -395,18 +395,18 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this.updateBindingOptions("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", oBindingData);
 
 		},
-		onInit: function() {
+		onInit: function () {
 			debugger;
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.oRouter.getTarget("InsuranceRelationship_1").attachDisplay(jQuery.proxy(this.handleRouteMatched, this));
 			var oView = this.getView();
 			oView.addEventDelegate({
-				onBeforeShow: function() {
+				onBeforeShow: function () {
 					if (sap.ui.Device.system.phone) {
 						var oPage = oView.getContent()[0];
 						if (oPage.getShowNavButton && !oPage.getShowNavButton()) {
 							oPage.setShowNavButton(true);
-							oPage.attachNavButtonPress(function() {
+							oPage.attachNavButtonPress(function () {
 								this.oRouter.navTo("ServiceList", {}, true);
 							}.bind(this));
 						}
@@ -437,24 +437,104 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 			oView.getModel("staticDataModel").setData(oData, true);
 
-			function dateDimensionFormatter(oDimensionValue, sTextValue) {
-				var oValueToFormat = sTextValue !== undefined ? sTextValue : oDimensionValue;
-				if (oValueToFormat instanceof Date) {
-					var oFormat = sap.ui.core.format.DateFormat.getDateInstance({
-						style: "short"
-					});
-					return oFormat.format(oValueToFormat);
-				}
-				return oValueToFormat;
-			}
+			// function dateDimensionFormatter(oDimensionValue, sTextValue) {
+			// 	var oValueToFormat = sTextValue !== undefined ? sTextValue : oDimensionValue;
+			// 	if (oValueToFormat instanceof Date) {
+			// 		var oFormat = sap.ui.core.format.DateFormat.getDateInstance({
+			// 			style: "short"
+			// 		});
+			// 		return oFormat.format(oValueToFormat);
+			// 	}
+			// 	return oValueToFormat;
+			// }
 
-			this.mAggregationBindingOptions = {};
-			this.createFiltersAndSorters();
+			// this.mAggregationBindingOptions = {};
+			// this.createFiltersAndSorters();
 
-			this.applyFiltersAndSorters("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", "items");
+			// this.applyFiltersAndSorters("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", "items");
 
 		},
-		onExit: function() {
+
+		onAdd: function (oEvent) {
+			var table = this.getView().byId("idList");
+			table.addItem(new sap.m.ColumnListItem({
+				cells: [
+
+					new sap.m.Input({
+						value: "",
+						showValueHelp: true,
+						valueHelpRequest: function (oEvent) {
+							that.getF4help(oEvent);
+						},
+						name: "",
+						visible: true,
+						width: "auto"
+					}),
+					new sap.m.Input({
+						value: "",
+						name: "",
+						visible: true,
+						width: "auto"
+					}),
+					new sap.m.Input({
+						value: "",
+						name: "",
+						visible: true,
+						width: "auto"
+					}),
+					new sap.m.ComboBox({
+						selectedKey: "",
+						items: [
+							new sap.ui.core.ListItem({
+								key: "COV",
+								text: "Coverage"
+							}),
+							new sap.ui.core.ListItem({
+								key: "DIS",
+								text: "Discount"
+							})
+						],
+						selectionChange: function (oEvent) {
+							debugger;
+							var selectedValue = oEvent.getParameter("selectedItem").getKey();
+
+							if(selectedValue === 'COV'){
+								oEvent.getSource().getParent().getCells()[4].setSelectedKey("");
+							}
+							oEvent.getSource().getParent().getCells()[4].setEnabled(selectedValue === 'DIS');
+						}
+					}),
+					new sap.m.ComboBox({
+						selectedKey: "",
+						enabled: false,
+						items: [
+							new sap.ui.core.ListItem({
+								key: "SPDS",
+								text: "Special Marketing Discount"
+							}),
+							new sap.ui.core.ListItem({
+								key: "MDS",
+								text: "Membership Discount"
+							}),
+							new sap.ui.core.ListItem({
+								key: "OTHDISC",
+								text: "Other Discount"
+							})
+						]
+					}),
+					new sap.m.Text({
+						text: "UPD",
+						visible: false
+					})
+				]
+			})
+			);
+			// this.getView().byId("idList").addItem(columnListItemNewLine);	
+		},
+		onChange: function(oEvent){
+			debugger;
+		},
+		onExit: function () {
 
 			// to destroy templates for bound aggregations when templateShareable is true on exit to prevent duplicateId issue
 			var aControls = [{
@@ -476,7 +556,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		onAfterRendering: function() {
+		onAfterRendering: function () {
 
 			var oChart,
 				self = this,
