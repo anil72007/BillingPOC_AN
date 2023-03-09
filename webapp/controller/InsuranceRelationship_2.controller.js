@@ -2,8 +2,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"sap/m/MessageBox",
 	"./InsuranceRelationshipRemark", "./Dialog5",
 	"./utilities",
-	"sap/ui/core/routing/History"
-], function (BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History) {
+	"sap/ui/core/routing/History", 'sap/ui/core/Fragment',
+	"sap/m/Dialog",
+], function (BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History, Fragment, Dialog) {
 	"use strict";
 
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.InsuranceRelationship_2", {
@@ -35,23 +36,97 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 				}
 			}
-
-			if (!this.sContext) {
-				this.sContext = "InsuranceSet('IN1')";
-			}
-
-			var oPath;
-
 			if (this.sContext) {
-				oPath = {
-					path: "/" + this.sContext,
-					parameters: oParams
-				};
-				this.getView().bindObject(oPath);
+				const aufnrRegex = /Aufnr='(\d+)'/;
+				const vbelnRegex = /Vbeln='(\d+)'/;
+
+				const aufnrMatch = this.sContext.match(aufnrRegex);
+				const vbelnMatch = this.sContext.match(vbelnRegex);
+
+				if (aufnrMatch && aufnrMatch.length >= 2) {
+					var aufnr = aufnrMatch[1];
+				}
+
+				if (vbelnMatch && vbelnMatch.length >= 2) {
+					var vbeln = vbelnMatch[1];
+				}
+				if (vbeln) {
+					var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
+					var oModel = new sap.ui.model.odata.ODataModel(url, true);
+					var efilter = "$filter=Aufnr eq '" + aufnr + "' and Vbeln eq '" + vbeln + "'";
+
+					var url = "InsContCondSet?" + "&&" + efilter;
+					var that = this;
+
+					oModel.read(url, null, null, null,
+						function onSuccess(oData, oResponse) {
+							debugger;
+							that.getView().byId("insno").setEnabled(false);
+							that.getView().byId("insno").setValue(oData.results[0].Payer);
+							that.getView().byId("insno").setDescription(oData.results[0].Name);
+							// that.getView().byId("DP1").setProperty("value", new Date(oData.results[0].ValidFrom))
+							var tMod = new sap.ui.model.json.JSONModel();
+							tMod.setData(oData.results)
+							that.getView().byId("DP1").setModel(tMod);
+							that.getView().byId("DP1").setEnabled(false);
+							that.getView().byId("DP1").bindProperty("value", {
+								path: "/0/ValidFrom",
+								type: new sap.ui.model.type.Date()
+							});
+							that.getView().byId("DP2").setModel(tMod);
+							that.getView().byId("DP2").setEnabled(false);
+							that.getView().byId("DP2").bindProperty("value", {
+								path: "/0/ValidTo",
+								type: new sap.ui.model.type.Date()
+							});
+							that.getView().byId("DP2").setEnabled(false);
+							that.getView().byId("idContType").setVisible(false);
+							for (var i = 0; i < oData.results.length; i++) {
+								if (oData.results[i].CondType === 'ZCO%') {
+									that.getView().byId("idTabCovPer").setValue(oData.results[i].CondValue);
+								} else if (oData.results[i].CondType === 'ZCOF') {
+									that.getView().byId("idTabCovAmt").setValue(oData.results[i].CondValue);
+								} else if (oData.results[i].CondType === 'ZDC%') {
+									that.getView().byId("idTabDisPer").setValue(oData.results[i].CondValue);
+								} else if (oData.results[i].CondType === 'ZDCF') {
+									that.getView().byId("idTabDisAmt").setValue(oData.results[i].CondValue);
+								}
+							}
+
+							const exCond = ['ZCO%', 'ZCOF', 'ZDC%', 'ZDCF'];
+							const exCondArr = tMod.getData().filter(item => !exCond.includes(item.CondType));
+							that.getView().getModel("addlServ").setData(exCondArr);
+						},
+						function _onError(oError) {
+							// that.oGloablDiaglogBox.close();
+						}
+
+					);
+				}
 			}
+			// if (!this.sContext) {
+			// 	this.sContext = "InsuranceSet('IN1')";
+			// }
+
+			// var oPath;
+
+			// if (this.sContext) {
+			// 	oPath = {
+			// 		path: "/" + this.sContext,
+			// 		parameters: oParams
+			// 	};
+			// 	this.getView().bindObject(oPath);
+			// }
 
 		},
 		_onPageNavButtonPress: function () {
+			var component = sap.ui.getCore().getComponent();
+			if (component) {
+				var container = new sap.ui.core.ComponentContainer({
+					component: component
+				});
+				container.destroy();
+			}
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
 			var oQueryParams = this.getQueryParameters(window.location);
@@ -397,8 +472,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},
 		onInit: function () {
 			debugger;
+			this.contdata = new sap.ui.model.json.JSONModel();
+			this.getView().setModel(this.contdata, "contdata");
+
+			this.addlServ = new sap.ui.model.json.JSONModel();
+			this.getView().setModel(this.addlServ, "addlServ");
+
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this.oRouter.getTarget("InsuranceRelationship_1").attachDisplay(jQuery.proxy(this.handleRouteMatched, this));
+			this.oRouter.getTarget("InsuranceRelationship_2").attachDisplay(jQuery.proxy(this.handleRouteMatched, this));
 			var oView = this.getView();
 			oView.addEventDelegate({
 				onBeforeShow: function () {
@@ -454,7 +535,137 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// this.applyFiltersAndSorters("sap_IconTabBar_Page_0-content-sap_m_IconTabBar-2-items-sap_m_IconTabFilter-1-content-build_simple_Table-1", "items");
 
 		},
+		oPayer: null,
+		oField: null,
+		searchBP: function (oEvent) {
+			debugger;
+			// this.oEventSrc = oEvent;
+			// this.id = oEvent.getSource().getId();
+			// this.name = oEvent.getSource().getName();
+			// var that = this;
 
+			this.oField = oEvent.getSource();
+			//Because we cannot access this variable as controller object
+			//inside callbacks/ promises, so we creeate a copy
+			var that = this;
+			if (!this.oPayer) {
+				Fragment.load({
+					name: 'com.sap.build.standard.pocPatientServiceAndInvoice.view.popup',
+					id: 'Payer',
+					controller: this
+				}).then(function (oFragment) {
+					//inside promise and call back functions, we cannot access this pointer
+					//controller object, so we need to create a local variable for controller object
+					//outside promise/callback var that = this;
+					that.oPayer = oFragment;
+					that.oPayer.setTitle("Search Business Partner");
+					//Grant the access to the fragment from the view to the model
+					that.getView().addDependent(that.oPayer);
+					that.oPayer.setMultiSelect(false);
+					//4th binding syntax agg binding
+					that.oPayer.bindAggregation("items", {
+						path: '/BusinessPartnerDetSet',
+						template: new sap.m.ObjectListItem({
+							title: '{PARTNER}',
+							intro: '{NAME}'
+						})
+					});
+					//check sdk functios for select dialog
+					that.oPayer.open();
+				});
+			} else {
+				this.oPayer.open();
+			}
+		},
+		onConfirmPopup: function (oEvent) {
+			debugger;
+			var sId = oEvent.getSource().getId();
+			if (sId.indexOf("kschl") != -1) {
+				var oSelectedItemObject = oEvent.getParameter("selectedItem");
+				//Extract the data from the item
+				var sText = oSelectedItemObject.getTitle();
+				//Set to the input field
+				this.oField.setValue(sText);
+				this.oField.setDescription(oSelectedItemObject.getIntro());
+			} else {
+				var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
+				var oModel = new sap.ui.model.odata.ODataModel(url, true);
+
+				var sId = oEvent.getSource().getId();
+				//Get the selected item object from event confirm
+				var oSelectedItemObject = oEvent.getParameter("selectedItem");
+				//Extract the data from the item
+				var sText = oSelectedItemObject.getTitle();
+				//Set to the input field
+				this.oField.setValue(sText);
+				this.oField.setDescription(oSelectedItemObject.getIntro());
+
+				var efilter = "$filter=Kunnr eq '" + sText + "'";
+
+				var url = "ContractSchemeDataSet?" + efilter;
+				var that = this;
+				oModel.read(url, null, null, null,
+					function onSuccess(oData, oResponse) {
+						that.getView().getModel("contdata").setData(oData.results)
+						const data = oData.results;
+						const uniqueData = {};
+						data.forEach(item => {
+
+							if (!uniqueData[item.DocNumber]) {
+
+								uniqueData[item.DocNumber] = item;
+							}
+						});
+
+						var tData = new sap.ui.model.json.JSONModel();
+						tData.setData(uniqueData);
+						that.getView().byId("idContType").setModel(tData, "tData")
+						that.getView().byId("idContType").bindItems({
+							path: "tData>/",
+							template: new sap.ui.core.ListItem({
+								text: "{tData>PurchNo}",
+								key: "{tData>DocNumber}"
+							})
+						});
+
+					},
+					function _onError(oError) {
+						// that.oGloablDiaglogBox.close();
+					});
+			}
+		},
+		onSelectionChange: function (oEvent) {
+			debugger;
+			var selectedValue = oEvent.getParameter("selectedItem").getKey();
+
+			this.cov = this.getView().byId("idCov")
+
+			var tCovData = new sap.ui.model.json.JSONModel();
+			tCovData.setData(this.getView().getModel("contdata").getData().filter(item => item.DocNumber === selectedValue && item.CondType === 'COV'));
+			if (tCovData.oData.length === 0) {
+				this.getView().byId("idTabCovAmt").setValue("");
+				this.getView().byId("idTabCovPer").setValue("");
+			} else {
+				this.getView().byId("idTabCovAmt").setValue(tCovData.oData[0].CondAmt);
+				this.getView().byId("idTabCovPer").setValue(tCovData.oData[0].CondPer);
+			}
+
+			tCovData.setData(this.getView().getModel("contdata").getData().filter(item => item.DocNumber === selectedValue && item.CondType === 'DIS'));
+			if (tCovData.oData.length === 0) {
+				this.getView().byId("idTabDisAmt").setValue("");
+				this.getView().byId("idTabDisPer").setValue("");
+			} else {
+				this.getView().byId("idTabDisAmt").setValue(tCovData.oData[0].CondAmt);
+				this.getView().byId("idTabDisPer").setValue(tCovData.oData[0].CondPer);
+			}
+
+			const exCond = ['COV', 'DIS'];
+			// const exCondArr = this.getView().getModel("contdata").getData().filter((element) => {
+			// 	return !exCond.includes(element);
+			//   });
+			const exCondArr = this.getView().getModel("contdata").getData().filter(item => !exCond.includes(item.CondType) && item.DocNumber === selectedValue);
+			this.getView().getModel("addlServ").setData(exCondArr);
+		},
 		onAdd: function (oEvent) {
 			var table = this.getView().byId("idList");
 			table.addItem(new sap.m.ColumnListItem({
@@ -498,7 +709,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 							debugger;
 							var selectedValue = oEvent.getParameter("selectedItem").getKey();
 
-							if(selectedValue === 'COV'){
+							if (selectedValue === 'COV') {
 								oEvent.getSource().getParent().getCells()[4].setSelectedKey("");
 							}
 							oEvent.getSource().getParent().getCells()[4].setEnabled(selectedValue === 'DIS');
@@ -531,7 +742,78 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			);
 			// this.getView().byId("idList").addItem(columnListItemNewLine);	
 		},
-		onChange: function(oEvent){
+		onAddCond: function (oEvent) {
+			var that = this;
+
+			var columnListItemNewLine = new sap.m.ColumnListItem({
+				cells: [
+
+					new sap.m.Input({
+						value: "",
+						showValueHelp: true,
+						valueHelpRequest: function (oEvent) {
+							that.getF4help(oEvent);
+						},
+						name: "",
+						visible: true,
+						width: "auto"
+					}),
+					new sap.m.Input({
+						value: "",
+						width: "auto"
+					}),
+					new sap.m.Text({
+						text: "UPD",
+						visible: false
+					})
+				]
+			});
+			this.getView().byId("idInsCond").addItem(columnListItemNewLine);
+		},
+		oCondType: null,
+		oField: null,
+		getF4help: function (oEvent) {
+			debugger;
+			// this.oEventSrc = oEvent;
+			// this.id = oEvent.getSource().getId();
+			// this.name = oEvent.getSource().getName();
+			// var that = this;
+
+			this.oField = oEvent.getSource();
+			//Because we cannot access this variable as controller object
+			//inside callbacks/ promises, so we creeate a copy
+			var that = this;
+			if (!this.oCondType) {
+				Fragment.load({
+					name: 'com.sap.build.standard.pocPatientServiceAndInvoice.view.popup',
+					id: 'kschl',
+					controller: this
+				}).then(function (oFragment) {
+					//inside promise and call back functions, we cannot access this pointer
+					//controller object, so we need to create a local variable for controller object
+					//outside promise/callback var that = this;
+					that.oCondType = oFragment;
+					that.oCondType.setTitle("Condition Type");
+					//Grant the access to the fragment from the view to the model
+					that.getView().addDependent(that.oCondType);
+					that.oCondType.setMultiSelect(false);
+					//4th binding syntax agg binding
+					that.oCondType.bindAggregation("items", {
+						path: '/GetConditionTypeSet',
+						template: new sap.m.ObjectListItem({
+							title: '{KSCHL}',
+							intro: '{VTEXT}'
+						})
+					});
+					//check sdk functios for select dialog
+					that.oCondType.open();
+				});
+			} else {
+				this.oCondType.open();
+			}
+
+		},
+		onChange: function (oEvent) {
 			debugger;
 		},
 		onExit: function () {

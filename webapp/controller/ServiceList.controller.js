@@ -236,7 +236,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				this.getView().bindElement(sPath, {
 					expand: 'To_Items'
 				});
-				this.getView().bindElement(sPath);
+				// this.getView().bindElement(sPath);
 
 				// var oModel = this.getOwnerComponent().getModel();
 				// this.getView().setModel(oModel);

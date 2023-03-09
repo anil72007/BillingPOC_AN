@@ -5,11 +5,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"sap/ui/core/routing/History",
 	"sap/ui/core/Fragment",
 	"com/sap/build/standard/pocPatientServiceAndInvoice/controller/BaseController"
-], function(BaseController, MessageBox, PaymentDistribution, Utilities, History, Fragment,BaseController1) {
+], function (BaseController, MessageBox, PaymentDistribution, Utilities, History, Fragment, BaseController1) {
 	"use strict";
 
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.ServiceDetail", {
-		handleRouteMatched: function(oEvent) {
+		handleRouteMatched: function (oEvent) {
 			// var sAppId = "App6352534280e30701c54b4b6b";
 
 			// var oParams = {};
@@ -52,28 +52,33 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// }
 
 		},
-		getConditionData: function(oEvent){
+		getConditionData: function (oEvent) {
 			debugger;
 			var cData = this.getOwnerComponent().getCompData();
 			var ItmNumber = oEvent.getParameters().arguments.ItmNumber;
 			this.itemCondTab = this.getView().byId("idItemCond");
 			this.listitem = this.getView().byId("idListItem");
-			if(this.listitem){
+			if (this.listitem) {
 				this.oTemplate = this.listitem.clone();
 			}
 
 			this.itemCond = new sap.ui.model.json.JSONModel();
-			this.itemCond.setData(cData.results[0].To_ItemCond.results.filter(item => item.ItmNumber === ItmNumber ));
+			this.itemCond.setData(cData.results[0].To_ItemCond.results.filter(item => item.ItmNumber === ItmNumber));
 			this.itemCondTab.setModel(this.itemCond);
-			this.itemCondTab.bindAggregation("items", {
+			var oBinding = this.itemCondTab.bindAggregation("items", {
 				path: "/",
 				template: this.oTemplate
 			});
-
+			// var that = this;
+			// oBinding.attachEventOnce("updateFinished", function() {
+			// 	debugger;
+			// 	var inputColumn = that.itemCondTab.getColumns()[1];
+			// 	var inputControl = inputColumn.getTemplate().getContent()[0];
+			//   });
 			this.movement = new sap.ui.model.json.JSONModel();
 			this.movTab = this.getView().byId("idMovement");
 			this.listMovement = this.getView().byId("idListMovement");
-			if (this.listMovement){
+			if (this.listMovement) {
 				this.oTempMovement = this.listMovement.clone();
 			}
 			this.movement.setData(cData.results[0].To_Movement.results);
@@ -82,8 +87,10 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				path: "/",
 				template: this.oTempMovement
 			});
+
+			
 		},
-		onAdd: function(oEvent){
+		onAdd: function (oEvent) {
 			var that = this;
 			// var cnt = parseInt(this.getView().byId("idFldVal").getCount()) + 1;
 			// cnt = cnt.toString();
@@ -94,9 +101,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					new sap.m.Input({
 						value: "",
 						showValueHelp: true,
-						valueHelpRequest: function(oEvent) {
+						valueHelpRequest: function (oEvent) {
 							that.getF4help(oEvent);
-    					},
+						},
 						name: "",
 						visible: true,
 						width: "auto"
@@ -115,12 +122,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					})
 				]
 			});
-			this.getView().byId("idItemCond").addItem(columnListItemNewLine);			
+			this.getView().byId("idItemCond").addItem(columnListItemNewLine);
 		},
-		
-        oCondType: null,
-        oField: null,
-		getF4help: function(oEvent) {
+
+		oCondType: null,
+		oField: null,
+		getF4help: function (oEvent) {
 			debugger;
 			// this.oEventSrc = oEvent;
 			// this.id = oEvent.getSource().getId();
@@ -128,147 +135,52 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// var that = this;
 
 			this.oField = oEvent.getSource();
-            //Because we cannot access this variable as controller object
-            //inside callbacks/ promises, so we creeate a copy
-            var that = this;
-			if(!this.oCondType){
-                Fragment.load({
-                    name: 'com.sap.build.standard.pocPatientServiceAndInvoice.view.popup',
-                    id: 'kschl',
-                    controller: this
-                }).then(function (oFragment) {
-                    //inside promise and call back functions, we cannot access this pointer
-                    //controller object, so we need to create a local variable for controller object
-                    //outside promise/callback var that = this;
-                    that.oCondType = oFragment;
-                    that.oCondType.setTitle("Condition Type");
-                    //Grant the access to the fragment from the view to the model
-                    that.getView().addDependent(that.oCondType);
-                    that.oCondType.setMultiSelect(false);
-                    //4th binding syntax agg binding
-                    that.oCondType.bindAggregation("items",{
-                        path : '/GetConditionTypeSet',
-                        template: new sap.m.ObjectListItem({
-                            title: '{KSCHL}',
-                            intro: '{VTEXT}'
-                        })
-                    });
-                    //check sdk functios for select dialog
-                    that.oCondType.open();
-                });
-			}else{
+			//Because we cannot access this variable as controller object
+			//inside callbacks/ promises, so we creeate a copy
+			var that = this;
+			if (!this.oCondType) {
+				Fragment.load({
+					name: 'com.sap.build.standard.pocPatientServiceAndInvoice.view.popup',
+					id: 'LineItemCond',
+					controller: this
+				}).then(function (oFragment) {
+					//inside promise and call back functions, we cannot access this pointer
+					//controller object, so we need to create a local variable for controller object
+					//outside promise/callback var that = this;
+					that.oCondType = oFragment;
+					that.oCondType.setTitle("Condition Type");
+					//Grant the access to the fragment from the view to the model
+					that.getView().addDependent(that.oCondType);
+					that.oCondType.setMultiSelect(false);
+					//4th binding syntax agg binding
+					that.oCondType.bindAggregation("items", {
+						path: '/GetConditionTypeSet',
+						template: new sap.m.ObjectListItem({
+							title: '{KSCHL}',
+							intro: '{VTEXT}'
+						})
+					});
+					//check sdk functios for select dialog
+					that.oCondType.open();
+				});
+			} else {
 				this.oCondType.open();
 			}
-			// var oValueHelpDialog = new sap.ui.ux3.ToolPopup({
-			// 	modal: true,
-			// 	inverted: false, // disable color inversion
-			// 	title: "Search Based on Condition Type",
-			// 	opener: oEvent.getSource().getId(),
-			// 	closed: function(oEvent) {
-			// 		debugger;
-			// 		var oCore = sap.ui.getCore();
-			// 		var oContext = that.oHelpTable.getContextByIndex(that.oHelpTable.getSelectedIndex());
-			// 		if (oContext) {
-			// 			var oSel = oContext.getModel().getProperty(oContext.getPath());
-			// 			oCore.byId(that.id).setValue(oSel["KSCHL"]);
-			// 			oCore.byId(that.id).setDescription(oSel["VTEXT"]);
-			// 		};
 
-			// 	}
-			// });
-
-			// var oTextField = new sap.ui.commons.TextField({
-			// 	//	width: '100px', // width of the textfield
-			// 	width: "300pt",
-			// 	placeholder: "Search by condition type",
-			// 	editable: true, // read only - true or not
-			// 	maxLength: 40, // maximum characters allowed
-			// 	change: function(oEvent) {
-
-			// 	},
-			// 	liveChange: function(oEvent) {
-			// 		if (oEvent.getParameter("liveValue").length > 0) {
-			// 			debugger;
-			// 			var filter = [];
-			// 			var oFilter = new sap.ui.model.Filter("VTEXT", sap.ui.model.FilterOperator.Contains, oEvent.getParameter("liveValue"));
-			// 			filter.push(oFilter);
-
-			// 			this.getParent().getContent()[1].getBinding("rows").filter(filter);
-			// 		} else {
-			// 			this.getParent().getContent()[1].getBinding("rows").filter([]);
-			// 		}
-			// 	}
-			// });
-			// oValueHelpDialog.addContent(oTextField);
-
-			// var oOkButton = new sap.ui.commons.Button({
-			// 	text: "OK",
-			// 	press: function(oEvent) {
-			// 		oEvent.getSource().getParent().close();
-			// 	}
-			// });
-
-			// oValueHelpDialog.addButton(oOkButton);
-
-			// this.oHelpTable = new sap.ui.table.Table({
-			// 	selectionMode: sap.ui.table.SelectionMode.Single,
-			// 	visibleRowCount: 7,
-			// 	width: "300pt"
-			// });
-
-			// this.oHelpTable.addColumn(
-			// 	new sap.ui.table.Column({
-			// 		label: new sap.ui.commons.Label({
-			// 			text: "Condition Type"
-			// 		}),
-			// 		template: new sap.ui.commons.TextView().bindProperty("text", "KSCHL"),
-			// 	})
-			// );
-
-			// this.oHelpTable.addColumn(
-			// 	new sap.ui.table.Column({
-			// 		label: new sap.ui.commons.Label({
-			// 			text: "Description"
-			// 		}),
-			// 		template: new sap.ui.commons.TextView().bindProperty("text", "VTEXT"),
-			// 		sortProperty: "VTEXT",
-			// 		filterProperty: "VTEXT",
-			// 	})
-			// );
-
-			// var efilter = "$filter=NAME eq '" + this.name + "'";
-			// var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
-			// var oModel = new sap.ui.model.odata.ODataModel(url, true);
-			// this.servgrp = new sap.ui.model.json.JSONModel();
-
-			// oModel.read("/GetConditionTypeSet", null, [efilter], null,
-			// 	function _OnSuccess(oData, oResonse) {
-			// 		debugger;
-			// 		that.servgrp.setData(oData.results);
-			// 		that.oHelpTable.setModel(that.servgrp);
-			// 		that.oHelpTable.bindAggregation("rows", "/");
-			// 	},
-			// 	function _OnError(oError) {
-
-			// 	});
-
-			// oValueHelpDialog.addContent(this.oHelpTable);
-
-			// oValueHelpDialog.open();
 		},
-		onConfirmPopup: function(oEvent){
+		onConfirmPopup: function (oEvent) {
 			debugger;
-            var sId = oEvent.getSource().getId();
+			var sId = oEvent.getSource().getId();
 			//Get the selected item object from event confirm
 			var oSelectedItemObject = oEvent.getParameter("selectedItem");
 			//Extract the data from the item
 			var sText = oSelectedItemObject.getTitle();
 			//Set to the input field
 			this.oField.setValue(sText);
-            this.oField.setDescription(oSelectedItemObject.getIntro());
-            
-        },
-		_onButtonPress: function() {
+			this.oField.setDescription(oSelectedItemObject.getIntro());
+
+		},
+		_onButtonPress: function () {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
 			var oQueryParams = this.getQueryParameters(window.location);
@@ -281,7 +193,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
-		getQueryParameters: function(oLocation) {
+		getQueryParameters: function (oLocation) {
 			var oQuery = {};
 			var aParams = oLocation.search.substring(1).split("&");
 			for (var i = 0; i < aParams.length; i++) {
@@ -291,7 +203,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			return oQuery;
 
 		},
-		_onButtonPress1: function(oEvent) {
+		_onButtonPress1: function (oEvent) {
 
 			var sDialogName = "PaymentDistribution";
 			this.mDialogs = this.mDialogs || {};
@@ -310,28 +222,20 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			oDialog.open();
 
 		},
-		onInit: function() {
+		onInit: function () {
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.oRouter.getRoute("ConditionDetails").attachMatched(this.getConditionData, this);
-			// this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			// this.oRouter.getTarget("ServiceDetail").attachDisplay(jQuery.proxy(this.handleRouteMatched, this));
-			// var oView = this.getView();
-			// oView.addEventDelegate({
-			// 	onBeforeShow: function() {
-			// 		if (sap.ui.Device.system.phone) {
-			// 			var oPage = oView.getContent()[0];
-			// 			if (oPage.getShowNavButton && !oPage.getShowNavButton()) {
-			// 				oPage.setShowNavButton(true);
-			// 				oPage.attachNavButtonPress(function() {
-			// 					this.oRouter.navTo("ServiceList", {}, true);
-			// 				}.bind(this));
-			// 			}
-			// 		}
-			// 	}.bind(this)
-			// });
 
+			// var inputColumn = this.getView().byId("idItemCond").getColumns()[0];
+
+			// var inputControl = inputColumn.getTemplate().getContent()[0];
+
+			// // Attach a change event listener to the input control
+			// inputControl.attachChange(function (event) {
+			// 	debugger;
+			// });
 		},
-		onExit: function() {
+		onExit: function () {
 
 			// to destroy templates for bound aggregations when templateShareable is true on exit to prevent duplicateId issue
 			var aControls = [{

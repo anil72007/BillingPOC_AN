@@ -61,7 +61,9 @@
 		</fo:SimpleForm>
 	</VBox>
             <FlexBox height="100px" alignItems="Start" justifyContent="Start">
-                <Table id="idInvoiceTab" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path: 'invoice>/'}">
+                <Table id="idInsuranceTab" width="auto" noDataText="No data" 
+                mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" 
+                items="{path: 'To_InsuranceHeader'}" itemPress="onItemPressSupp">
                     <!-- <infoToolbar>
                         <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
                             <content>
@@ -101,15 +103,22 @@
                             </header>
                             <footer />
                         </Column>
+                        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                            <header>
+                                <Text text="Main Insurance" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                            </header>
+                            <footer />
+                        </Column>
                     </columns>
                     <items>
                         <ColumnListItem id="idInvoiceList" type="Active">
                             <cells>
-                                <ObjectIdentifier title="{invoice>Vbeln}" text="" titleActive="false" visible="true" />
-                                <Text text="{invoice>Kunrg}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                <Text text="{invoice>Ernam}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                <ObjectNumber number="{path: 'invoice>Netwr', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 2 }}" unit="SGD" emphasized="true" state="None" />
-                                <Text text="{path: 'invoice>Erdat', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                <ObjectIdentifier title="{Payer}" text="" titleActive="false" visible="true" />
+                                <Text text="{Name}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                <Text text="{path: 'ValidFrom', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                <Text text="{path: 'ValidTo', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                <Text text="{Vbeln}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                <CheckBox  selected= "{path: 'MainIns'}" select="onSelectMainIns"></CheckBox>
                             </cells>
                         </ColumnListItem>
                     </items>

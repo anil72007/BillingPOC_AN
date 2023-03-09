@@ -36,12 +36,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				}
 			}
 
-			if (!this.sContext) {
-				this.sContext = "InsuranceSet('IN1')";
-			}
+			// if (!this.sContext) {
+			// 	this.sContext = "InsuranceSet('IN1')";
+			// }
 
 			var oPath;
-
+			// var sPath = '/' + this.sContext;
+			// this.getView().bindElement(sPath, {
+			// 	expand: 'To_InsuranceHeader'
+			// });
 			if (this.sContext) {
 				oPath = {
 					path: "/" + this.sContext,
@@ -62,6 +65,18 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				if (err !== undefined) {
 					MessageBox.error(err.message);
 				}
+			});
+		},
+		onItemPressSupp: function (oEvent) {
+			debugger;
+			var oBindingContext = oEvent.getSource().getBindingContext();
+
+			var sPath = oEvent.getParameter("listItem").getBindingContextPath();
+			var myId = sPath.split("/")[sPath.split("/").length - 1];
+			// var myId = oEvent.getParameter("listItem").getBindingContext().getModel().oData[oEvent.getParameter("listItem").getBindingContext().getPath().substring(1)].CaseOrder;
+
+			this.oRouter.navTo("InsuranceRelationship_3", {
+				VBELN: myId
 			});
 		},
 		doNavigate: function (sRouteName, oBindingContext, fnPromiseResolve, sViaRelation, oEvent) {
@@ -546,6 +561,26 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				}
 			}
 
+		},
+		onSelectMainIns: function (oEvent) {
+			debugger;
+			var oTable = this.getView().byId("idInsuranceTab");
+			var oCheckBox = oEvent.getSource();
+			var oModel = oTable.getModel();
+			var aItems = oTable.getItems();
+			if (oCheckBox.getSelected()) {
+				// Loop through all the rows in the table
+				for (var i = 0; i < aItems.length; i++) {
+					var oItem = aItems[i];
+					var oCheckBoxInRow = oItem.getCells()[5];
+
+					// Set the selected property of each checkbox control to false, except for the one that triggered the event
+					if (oCheckBoxInRow !== oCheckBox) {
+						oCheckBoxInRow.setSelected(false);
+					}
+				}
+
+			}
 		},
 		onAfterRendering: function () {
 

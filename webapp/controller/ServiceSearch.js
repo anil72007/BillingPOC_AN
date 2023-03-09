@@ -269,7 +269,8 @@ sap.ui.define([
 					"Mode": "INS"
 				};
 				oData.To_Items.results.push(data);
-				var efilter = "$filter=ITM_NUMBER eq '" + res + "' and MATERIAL eq '" + this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle() + "'";
+				var efilter = "$filter=ITM_NUMBER eq '" + res + "' and PARTN_NUMB eq '" + oData.PartNo + "' and MATERIAL eq '" 
+																+ this.getView().byId("idSrcSearch").getSelectedItems()[i].getCells()[0].getTitle() + "'";
 
 				var url = "SimPriceHeadSet?$expand=To_SimPrice" + "&&" + efilter;
 				var that = this;
@@ -277,7 +278,15 @@ sap.ui.define([
 					function onSuccess(oData, oResponse) {
 						debugger;
 						for (var i = 0; i < oData.results[0].To_SimPrice.results.length; i++) {
-							that.getView().getModel("main").getData().To_ItemCond.results.push(oData.results[0].To_SimPrice.results[i]);
+							var itemCond = {
+								"SdDoc" : that.getView().byId("idtab").getItems()[that.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
+								"ItmNumber" : oData.results[0].To_SimPrice.results[i].ItmNumber,
+								"CondType" : oData.results[0].To_SimPrice.results[i].CondType,
+								"CondTypeDesc" : oData.results[0].To_SimPrice.results[i].CondTypeDesc,
+								"CondValue" : oData.results[0].To_SimPrice.results[i].CondValue
+
+							};
+							that.getView().getModel("main").getData().To_ItemCond.results.push(itemCond);
 						}
 
 
