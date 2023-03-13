@@ -75,6 +75,12 @@
                     <columns>
                         <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
                             <header>
+                                <Text text="Rank" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                            </header>
+                            <footer />
+                        </Column>
+                        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                            <header>
                                 <Text text="Insurance Number" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                             </header>
                             <footer />
@@ -109,16 +115,24 @@
                             </header>
                             <footer />
                         </Column>
+                        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                            <header>
+                                <Text text="Active Indicator" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                            </header>
+                            <footer />
+                        </Column>
                     </columns>
                     <items>
                         <ColumnListItem id="idInvoiceList" type="Active">
                             <cells>
+                                <ObjectIdentifier title="{Rank}" text="" titleActive="false" visible="true" />
                                 <ObjectIdentifier title="{Payer}" text="" titleActive="false" visible="true" />
                                 <Text text="{Name}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                 <Text text="{path: 'ValidFrom', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                 <Text text="{path: 'ValidTo', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                 <Text text="{Vbeln}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                 <CheckBox  selected= "{path: 'MainIns'}" select="onSelectMainIns"></CheckBox>
+                                <CheckBox  selected= "{path: 'ActiveInd'}" select=""></CheckBox>
                             </cells>
                         </ColumnListItem>
                     </items>

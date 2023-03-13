@@ -22,14 +22,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		onBeforeRebindTable: function (oEvent) {
 			debugger;
 			var mBindingParams = oEvent.getParameter("bindingParams");
-			var oMultiComboBox = this.getView().byId("multiComboBox");
-			var aCountKeys = oMultiComboBox.getSelectedKeys();
-			for (var i = 0; i < aCountKeys.length; i++) {
-				var newFilter = new Filter("CaseType", FilterOperator.EQ, aCountKeys[i]);
-				if (aCountKeys.length > 0) {
-					mBindingParams.filters.push(newFilter);
-				}
-			}
+			// var oMultiComboBox = this.getView().byId("multiComboBox");
+			// var aCountKeys = oMultiComboBox.getSelectedKeys();
+			// for (var i = 0; i < aCountKeys.length; i++) {
+			// 	var newFilter = new Filter("CaseType", FilterOperator.EQ, aCountKeys[i]);
+			// 	if (aCountKeys.length > 0) {
+			// 		mBindingParams.filters.push(newFilter);
+			// 	}
+			// }
 
 			var idMovement = this.getView().byId("idMovement");
 			var aCountKeys = idMovement.getSelectedKeys();

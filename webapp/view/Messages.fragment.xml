@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.ui.layout.form">
-    <Table id="idTable" mode="None" items="{message>/To_Message/results}">
+    <Table id="idTable" mode="None" items="{message>/results}">
         <!-- <headerToolbar>
             <Toolbar>
                 <ToolbarSpacer />

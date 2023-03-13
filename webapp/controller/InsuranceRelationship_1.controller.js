@@ -52,7 +52,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				};
 				this.getView().bindObject(oPath);
 			}
-
+			this.getView().getModel().refresh();
 		},
 		onSubmitButtonPressed: function (oEvent) {
 			debugger;
@@ -572,7 +572,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				// Loop through all the rows in the table
 				for (var i = 0; i < aItems.length; i++) {
 					var oItem = aItems[i];
-					var oCheckBoxInRow = oItem.getCells()[5];
+					var oCheckBoxInRow = oItem.getCells()[6];
 
 					// Set the selected property of each checkbox control to false, except for the one that triggered the event
 					if (oCheckBoxInRow !== oCheckBox) {

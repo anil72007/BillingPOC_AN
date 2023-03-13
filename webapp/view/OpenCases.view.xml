@@ -91,7 +91,8 @@
                 ignoredFields="CaseOrder,CaseId,CaseType,PatientId,NameFirst,NameLast,Age,Birthdate,Sex"
             >
                 
-                <Table mode="SingleSelectMaster" itemPress="onItemPressSupp">
+                <Table mode="SingleSelectMaster" itemPress="onItemPressSupp" growingThreshold="20" growing="true"
+                            growingScrollToLoad="true">
                     <columns>
                         <Column mergeDuplicates="true">
                             <customData>

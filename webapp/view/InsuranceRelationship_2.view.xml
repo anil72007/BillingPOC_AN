@@ -59,7 +59,8 @@
                                                                 }"
                     />
                     <core:Title text="Activation" />
-                    <ToggleButton pressed="true" text="Activated" icon="sap-icon://activate" iconFirst="true" width="auto" enabled="true" visible="true" />
+                    <!-- <ToggleButton pressed="true" text="Activated" icon="sap-icon://activate" iconFirst="true" width="auto" enabled="true" visible="true" /> -->
+                    <ToggleButton id="idActInd" icon="sap-icon://status-negative" text="Inactive" tooltip="Activate Button" press="onPress" class="toggleButton" />
                     <Button text="Remark" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress2" />
                     <Label text="File Upload" labelFor="FP" />
                     <unified:FileUploader
@@ -85,8 +86,10 @@
                     </unified:FileUploader>
                     <Label text="" />
 
-                    <CheckBox text="Verified" selected="true" editable="false" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true" />
-                    <CheckBox text="Main Insuror" selected="true" editable="true" enabled="true" visible="true" width="167.11459350585938px" textDirection="Inherit" wrapping="false" useEntireWidth="true" />
+                    <Label text="Rank" labelFor="rank" />
+                    <Input id="rank" value="" showValueHelp="false" width="50px" />
+                    <!-- <CheckBox text="Verified" selected="true" editable="false" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true" /> -->
+                    <CheckBox text="Main Insuror" id="idMainInsChk" selected="true" editable="true" enabled="true" visible="true" width="200px" textDirection="Inherit" wrapping="false" useEntireWidth="true" />
                 </fo:content>
             </fo:SimpleForm>
             <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="164.11459350585938px" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
@@ -163,14 +166,14 @@
                         <content>
                             <HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
                                 <items>
-                                    <Button text="" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onAddCond"/>
+                                    <Button text="" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onAddCond" />
                                     <ToolbarSpacer width="20px" />
                                     <Button text="" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
                                 </items>
                                 <layoutData />
                             </HBox>
-                            <Table width="400px" noDataText="" mode="None" id="idInsCond"
-                            showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path: 'addlServ>/'}">
+                            <Table width="400px" noDataText="" mode="None" id="idInsCond" showSeparators="All" growing="true" 
+                            growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path: 'addlServ>/'}">
                                 <infoToolbar />
                                 <!-- <headerToolbar>
                                     <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
@@ -226,7 +229,7 @@
                                                 valueStateText="Invalid entry"
                                                 maxLength="0"
                                             />
-                                            <Text text="" visible="false"/>
+                                            <Text text="" visible="false" />
                                         </cells>
                                     </ColumnListItem>
                                 </items>

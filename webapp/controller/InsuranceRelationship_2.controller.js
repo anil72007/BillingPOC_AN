@@ -4,10 +4,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	"./utilities",
 	"sap/ui/core/routing/History", 'sap/ui/core/Fragment',
 	"sap/m/Dialog",
-], function (BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History, Fragment, Dialog) {
+	"com/sap/build/standard/pocPatientServiceAndInvoice/utils/format"
+], function (BaseController, MessageBox, InsuranceRelationshipRemark, Dialog5, Utilities, History, Fragment, Dialog,format) {
 	"use strict";
 
 	return BaseController.extend("com.sap.build.standard.pocPatientServiceAndInvoice.controller.InsuranceRelationship_2", {
+		formatter: format,
 		handleRouteMatched: function (oEvent) {
 			debugger;
 			var sAppId = "App6352534280e30701c54b4b6b";
@@ -44,16 +46,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				const vbelnMatch = this.sContext.match(vbelnRegex);
 
 				if (aufnrMatch && aufnrMatch.length >= 2) {
-					var aufnr = aufnrMatch[1];
+					this.aufnr = aufnrMatch[1];
 				}
 
 				if (vbelnMatch && vbelnMatch.length >= 2) {
-					var vbeln = vbelnMatch[1];
+					this.vbeln = vbelnMatch[1];
 				}
-				if (vbeln) {
+				if (this.vbeln) {
 					var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
 					var oModel = new sap.ui.model.odata.ODataModel(url, true);
-					var efilter = "$filter=Aufnr eq '" + aufnr + "' and Vbeln eq '" + vbeln + "'";
+					var efilter = "$filter=Aufnr eq '" + this.aufnr + "' and Vbeln eq '" + this.vbeln + "'";
 
 					var url = "InsContCondSet?" + "&&" + efilter;
 					var that = this;
@@ -104,6 +106,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					);
 				}
 			}
+
+			if(!this.aufnr){
+				var result = this.sContext;
+				this.aufnr = result.substr(result.indexOf("'") + 1, result.lastIndexOf("'") - result.indexOf("'") - 1);
+				
+			}
 			// if (!this.sContext) {
 			// 	this.sContext = "InsuranceSet('IN1')";
 			// }
@@ -119,7 +127,80 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// }
 
 		},
+		clearValues: function(){
+			this.getView().byId("insno").setValue("");
+			this.getView().byId("insno").setDescription("");
+			this.getView().byId("rank").setValue("");
+			this.getView().byId("DP1").setModel(null);
+
+			this.getView().byId("DP1").setValue("");
+
+			this.getView().byId("DP2").setValue("");
+			
+			this.getView().byId("idContType").setSelectedItem(null);
+			this.getView().byId("idTabCovPer").setValue("");
+			this.getView().byId("idTabCovAmt").setValue("");
+			this.getView().byId("idTabDisPer").setValue("");
+			this.getView().byId("idTabDisAmt").setValue("");
+
+
+			this.getView().byId("idActInd").setIcon("sap-icon://status-negative");
+			this.getView().byId("idActInd").setText("Inactive");
+			this.getView().byId("idActInd").removeStyleClass("active");
+			this.actInd = false;
+			this.getView().byId("idMainInsChk").setSelected(false);
+
+			this.getView().getModel("addlServ").setData([]);
+			// this.getView().byId("idInsCond").unbindItems();
+		},
+		 clearControls: function(oControl) {
+			// Clear any bindings on the control
+			if (oControl.unbindElement) {
+			  oControl.unbindElement();
+			}
+			if (oControl.unbindAggregation) {
+			  oControl.unbindAggregation();
+			}
+		  
+			// Clear any models on the control
+			if (oControl.setModel) {
+			  oControl.setModel(null);
+			}
+		  
+			// Clear any input fields
+			if (oControl.setValue) {
+			  oControl.setValue("");
+			}
+		  
+			// Clear any child controls
+			var aChildren = oControl.getAggregation("content");
+			if (aChildren) {
+			  for (var i = 0; i < aChildren.length; i++) {
+				this.clearControls(aChildren[i]);
+			  }
+			}
+		  
+			// Clear any aggregation
+			var aAggregations = oControl.getMetadata().getAllAggregations();
+			for (var j = 0; j < aAggregations.length; j++) {
+			  var sAggregationName = aAggregations[j].getName();
+			  if (oControl.getBindingInfo(sAggregationName)) {
+				oControl.unbindAggregation(sAggregationName);
+			  }
+			  oControl.destroyAggregation(sAggregationName);
+			}
+		  },
 		_onPageNavButtonPress: function () {
+			// var oView = this.getView();
+
+			// // Destroy all controls of the page
+			// var aContent = oView.getContent();
+			// for (var i = 0; i < aContent.length; i++) {
+			// 	this.clearControls(aContent[i]);
+			// }
+
+			this.clearValues();
+
 			var component = sap.ui.getCore().getComponent();
 			if (component) {
 				var container = new sap.ui.core.ComponentContainer({
@@ -300,84 +381,149 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			// Please implement
 
 		},
+		onPress: function(event) {
+			var button = event.getSource();
+			var isActivated = button.getPressed();
+			if (isActivated) {
+			  button.setIcon("sap-icon://status-positive");
+			  button.setText("Active");
+			  button.addStyleClass("active");
+			} else {
+			  button.setIcon("sap-icon://status-negative");
+			  button.setText("Inactive");
+			  button.removeStyleClass("active");
+			}
+			this.actInd = isActivated;
+		  },
 		_onButtonPress3: function (oEvent) {
 
-			oEvent = jQuery.extend(true, {}, oEvent);
-			return new Promise(function (fnResolve) {
-				fnResolve(true);
-			})
-				.then(function (result) {
-					var oView = this.getView(),
-						oController = this,
-						status = true,
-						requiredFieldInfo = [];
-					if (requiredFieldInfo.length) {
-						status = this.handleChangeValuestate(requiredFieldInfo, oView);
-					}
-					if (status) {
-						return new Promise(function (fnResolve, fnReject) {
-							var oModel = oController.oModel;
+			debugger;
+			var url = "/sap/opu/odata/sap/ZGW_BILLING_APP_SRV/";
+			var oModel = new sap.ui.model.odata.ODataModel(url, true);
 
-							var fnResetChangesAndReject = function (sMessage) {
-								oModel.resetChanges();
-								fnReject(new Error(sMessage));
-							};
-							if (oModel && oModel.hasPendingChanges()) {
-								oModel.submitChanges({
-									success: function (oResponse) {
-										var oBatchResponse = oResponse.__batchResponses[0];
-										var oChangeResponse = oBatchResponse.__changeResponses && oBatchResponse.__changeResponses[0];
-										if (oChangeResponse && oChangeResponse.data) {
-											var sNewContext = oModel.getKey(oChangeResponse.data);
-											oView.unbindObject();
-											oView.bindObject({
-												path: "/" + sNewContext
-											});
-											if (window.history && window.history.replaceState) {
-												window.history.replaceState(undefined, undefined, window.location.hash.replace(encodeURIComponent(oController.sContext), encodeURIComponent(sNewContext)));
-											}
-											oModel.refresh();
-											fnResolve();
-										} else if (oChangeResponse && oChangeResponse.response) {
-											fnResetChangesAndReject(oChangeResponse.message);
-										} else if (!oChangeResponse && oBatchResponse.response) {
-											fnResetChangesAndReject(oBatchResponse.message);
-										} else {
-											oModel.refresh();
-											fnResolve();
-										}
-									},
-									error: function (oError) {
-										fnReject(new Error(oError.message));
-									}
-								});
-							} else {
-								fnResolve();
+			// var cData = this.getOwnerComponent().getCompData().results[0];
+			var that = this;
+			this.oMessage = new sap.ui.model.json.JSONModel();
+			// this.oGloablDiaglogBox.open();
+			this.hData = {
+				"Aufnr": this.aufnr,
+				"Vbeln": this.vbeln,
+				"ValidFrom": this.getView().byId("DP1").getDateValue(),
+				"ValidTo": this.getView().byId("DP2").getDateValue(),
+				"Rank": this.getView().byId("rank").getValue(),
+				"Text": "",
+				"ActiveInd": this.actInd,
+				"ControlNo": "",
+				"Payer": this.getView().byId("insno").getValue(),
+				"Name": "",
+				"MainIns": this.getView().byId("idMainInsChk").getSelected(),
+				"Ins_ToCond": [],
+				"To_InsMessage": [],
+
+			};
+			var oTable = this.getView().byId("idInsCond");
+			for (var i = 0; i < oTable.getItems().length; i++) {
+				var sId = oTable.getItems()[i].getCells()[0].getId();
+				if (sId.indexOf("input") != -1) {
+					var condType = oTable.getItems()[i].getCells()[0].getValue();
+				} else {
+					var condType = oTable.getItems()[i].getCells()[0].getTitle();
+				}
+
+				var condVal = oTable.getItems()[i].getCells()[1].getValue();
+				var itemData = {
+					"Aufnr": this.aufnr,
+					"Vbeln": this.vbeln,
+					"ValidFrom": this.getView().byId("DP1").getDateValue(),
+					"ValidTo": this.getView().byId("DP2").getDateValue(),
+					"CondType": condType,
+					"CondValue": condVal
+				}
+				this.hData.Ins_ToCond.push(itemData);
+			}
+			var itemData = {
+				"Aufnr": this.aufnr,
+				"Vbeln": this.vbeln,
+				"ValidFrom": this.getView().byId("DP1").getDateValue(),
+				"ValidTo": this.getView().byId("DP2").getDateValue(),
+				"CondType": "ZCO%",
+				"CondValue": this.getView().byId("idTabCovPer").getValue()
+			}
+			this.hData.Ins_ToCond.push(itemData);
+
+			var itemData = {
+				"Aufnr": this.aufnr,
+				"Vbeln": this.vbeln,
+				"ValidFrom": this.getView().byId("DP1").getDateValue(),
+				"ValidTo": this.getView().byId("DP2").getDateValue(),
+				"CondType": "ZCOF",
+				"CondValue": this.getView().byId("idTabCovAmt").getValue()
+			}
+			this.hData.Ins_ToCond.push(itemData);
+			var itemData = {
+				"Aufnr": this.aufnr,
+				"Vbeln": this.vbeln,
+				"ValidFrom": this.getView().byId("DP1").getDateValue(),
+				"ValidTo": this.getView().byId("DP2").getDateValue(),
+				"CondType": "ZDC%",
+				"CondValue": this.getView().byId("idTabDisPer").getValue()
+			}
+			this.hData.Ins_ToCond.push(itemData);
+			var itemData = {
+				"Aufnr": this.aufnr,
+				"Vbeln": this.vbeln,
+				"ValidFrom": this.getView().byId("DP1").getDateValue(),
+				"ValidTo": this.getView().byId("DP2").getDateValue(),
+				"CondType": "ZDCF",
+				"CondValue": this.getView().byId("idTabDisAmt").getValue()
+			}
+			this.hData.Ins_ToCond.push(itemData);
+
+			var msg = {
+				"Type" : "S",
+				"Id" : "ZDE",
+				"Number" : "11"
+			}
+			this.hData.To_InsMessage.push(msg);
+			this.oMessage = new sap.ui.model.json.JSONModel();
+			this.oGloablDiaglogBox.open();
+			this.popupView = null;
+
+			oModel.create("/InsuranceContractSet", this.hData, {
+				method: "POST",
+				success: function (oResultData, oResponse) {
+					
+					that.oGloablDiaglogBox.close();
+					if (!that.popupView) {
+						that.popupView = sap.ui.xmlfragment("com.sap.build.standard.pocPatientServiceAndInvoice.view.Messages", that);
+					}
+					that.oMessage.setData(oResultData.To_InsMessage);
+
+					that.popupView.setModel(that.oMessage, "message");
+					var dialog = new sap.m.Dialog({
+						title: "Messages",
+						contentWidth: "600px",
+						contentHeight: "600px",
+						content: that.popupView,
+						beginButton: new sap.m.Button({
+							text: "OK",
+							press: function () {
+								that._onPageNavButtonPress();
+								that.popupView.destroy();
+								dialog.close();
 							}
-						});
-					}
-				}.bind(this))
-				.then(function (result) {
-					if (result === false) {
-						return false;
-					} else {
-						var oHistory = History.getInstance();
-						var sPreviousHash = oHistory.getPreviousHash();
-						var oQueryParams = this.getQueryParameters(window.location);
+						})
+					});
 
-						if (sPreviousHash !== undefined || oQueryParams.navBackToLaunchpad) {
-							window.history.go(-1);
-						} else {
-							var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-							oRouter.navTo("default", true);
-						}
+					dialog.open();
 
-					}
-				}.bind(this)).catch(function (err) {
-					if (err !== undefined) {
-						MessageBox.error(err.message);
-					}
-				});
+
+				},
+				error: function (e) {
+					that.oGloablDiaglogBox.close();
+					sap.m.MessageToast.show("Error while creating ");
+				}
+			});
 		},
 		handleChangeValuestate: function (requiredFieldInfo, oView) {
 			var status = true;
@@ -472,6 +618,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},
 		onInit: function () {
 			debugger;
+			this.aufnr = "";this.vbeln = "";
+			this.actInd = false;
+			this.oGloablDiaglogBox = new sap.m.BusyDialog();
 			this.contdata = new sap.ui.model.json.JSONModel();
 			this.getView().setModel(this.contdata, "contdata");
 

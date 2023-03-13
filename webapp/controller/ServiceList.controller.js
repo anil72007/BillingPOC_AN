@@ -285,7 +285,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					if (!that.popupView) {
 						that.popupView = sap.ui.xmlfragment("com.sap.build.standard.pocPatientServiceAndInvoice.view.Messages", that);
 					}
-					that.oMessage.setData(oResultData);
+					that.oMessage.setData(oResultData.To_Message);
 
 					that.popupView.setModel(that.oMessage, "message");
 					var dialog = new sap.m.Dialog({
