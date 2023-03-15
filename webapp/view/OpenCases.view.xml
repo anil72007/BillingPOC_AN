@@ -14,7 +14,7 @@
     <Page title="Open Case List" class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader 
     sapUiResponsivePadding--content sapUiResponsivePadding--footer" showNavButton="true">
         <VBox fitContainer="true">
-            <Button id="toggleUpdateMode" text="Change to 'LiveMode'" press="toggleUpdateMode" />
+            <!-- <Button id="toggleUpdateMode" text="Change to 'LiveMode'" press="toggleUpdateMode" /> -->
 
             <smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="GetCaseDataSet" enableBasicSearch="true" showClearButton="true">
                 <smartFilterBar:layoutData>
@@ -81,11 +81,13 @@
                 smartFilterId="smartFilterBar"
                 tableType="ResponsiveTable"
                 useExportToExcel="true"
-                useVariantManagement="false"
-                useTablePersonalisation="false"
+                useVariantManagement="true"
+                useTablePersonalisation="true"
                 header="Line Items"
                 showRowCount="true"
-                
+                persistencyKey="SmartTableAnalytical_Explored" 
+			    demandPopin="true" 
+
                 beforeRebindTable="onBeforeRebindTable"
                 
                 ignoredFields="CaseOrder,CaseId,CaseType,PatientId,NameFirst,NameLast,Age,Birthdate,Sex"

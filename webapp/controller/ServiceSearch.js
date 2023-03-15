@@ -223,10 +223,11 @@ sap.ui.define([
 			// this.getOwnerComponent().getCompData().results[0].To_Items.results.push(a);
 
 			var addItems = this.getView().byId("idSrcSearch").getSelectedItems();
-			// var headItem = this.cData.results[0].To_Items.results.filter(item => item.ItemCateg === 'ZADH');
+			var headItem = this.getView().getModel("main").getData().To_Items.results.filter(item => item.ItemCateg === 'ZADH');
 			// var headItem = this.getView().byId("idtab").getModel().getData();
 			// var existingItem = headItem[headItem.length - 1];
-			var itemno = this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[1].getText();
+			// var itemno = this.getView().byId("idtab").getItems()[this.getView().byId("idtab").getItems().length - 1].getCells()[1].getText();
+			var itemno = headItem[headItem.length - 1].ItmNumber;
 			var lineItem = parseInt(itemno, 10);
 
 			let currentDate = new Date();
@@ -277,7 +278,10 @@ sap.ui.define([
 				oModel.read(url, null, null, null,
 					function onSuccess(oData, oResponse) {
 						debugger;
+						var tPrice = 0;
+						var tItem = "";
 						for (var i = 0; i < oData.results[0].To_SimPrice.results.length; i++) {
+							tItem = oData.results[0].To_SimPrice.results[i].ItmNumber;
 							var itemCond = {
 								"SdDoc" : that.getView().byId("idtab").getItems()[that.getView().byId("idtab").getItems().length - 1].getCells()[0].getTitle(),
 								"ItmNumber" : oData.results[0].To_SimPrice.results[i].ItmNumber,
@@ -286,9 +290,12 @@ sap.ui.define([
 								"CondValue" : oData.results[0].To_SimPrice.results[i].CondValue
 
 							};
+							tPrice = tPrice + parseInt(oData.results[0].To_SimPrice.results[i].CondValue);
 							that.getView().getModel("main").getData().To_ItemCond.results.push(itemCond);
 						}
-
+						var itemUpd = that.getView().getModel("main").getData().To_Items.results.filter(item => item.ItmNumber === tItem);
+						itemUpd[0].NetValue = tPrice.toString();
+						that.getView().getModel("main").refresh();
 
 					},
 					function _onError(oError) {

@@ -134,7 +134,7 @@
                         <content>
                             <Table id="idRoomChg" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" 
                             growingScrollToLoad="true" class="sapUiResponsiveMargin" itemPress="_onTableItemPress"
-                           items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: ''},
+                           items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: 'OSB000000'},
                                                                              {path: 'ItemCateg', operator: 'EQ', value1: 'ZADH'}]}"                            
                              >
                                 <infoToolbar/>
@@ -207,7 +207,7 @@
                         <content>
                             <Table id="idConsumable" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" 
                             growingScrollToLoad="true" class="sapUiResponsiveMargin" itemPress="_onTableItemPress"
-                           items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: ''},
+                           items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: 'RAWMAT1'},
                                                                              {path: 'ItemCateg', operator: 'EQ', value1: 'ZADH'}]}"                             
                              >
                                 <infoToolbar/>
@@ -280,7 +280,7 @@
                         <content>
                             <Table id="idMedication" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" 
                             growingScrollToLoad="true" class="sapUiResponsiveMargin" itemPress="_onTableItemPress"
-                                                       items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: ''},
+                                                       items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: 'RAWMAT2'},
                                                                              {path: 'ItemCateg', operator: 'EQ', value1: 'ZADH'}]}" 
                              >
                                 <infoToolbar/>
@@ -354,7 +354,7 @@
                         <content>
                             <Table id="idExamination" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" 
                             growingScrollToLoad="true" class="sapUiResponsiveMargin" itemPress="_onTableItemPress"
-                           items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: ''},
+                           items="{path:'main>/To_Items/results',filters: [ {path: 'MatlGroup', operator: 'EQ', value1: 'OSC000000'},
                                                                              {path: 'ItemCateg', operator: 'EQ', value1: 'ZADH'}]}"                             
                              >
                                 <infoToolbar/>
